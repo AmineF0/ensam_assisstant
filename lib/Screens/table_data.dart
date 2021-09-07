@@ -1,7 +1,7 @@
 import 'package:data_tables/data_tables.dart';
 import 'package:flutter/material.dart';
 
-import '../DataList.dart';
+import '../Data/DataList.dart';
 import 'Item.dart';
 
 class TableWidget extends StatefulWidget {

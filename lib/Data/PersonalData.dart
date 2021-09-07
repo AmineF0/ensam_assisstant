@@ -1,7 +1,7 @@
 
-import 'package:ensam_assisstant/DataList.dart';
+import 'package:ensam_assisstant/Data/DataList.dart';
 import 'package:html/dom.dart';
-import 'request.dart';
+import '../Tools/request.dart';
 
 class PersonalData {
 

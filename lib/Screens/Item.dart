@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../DataList.dart';
+import '../Data/DataList.dart';
 
 class Item {
   late DataList data;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'RuntimeData.dart';
+import 'Data/RuntimeData.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'Screens/SignInOne.dart';
 import 'Screens/mainGUI.dart';

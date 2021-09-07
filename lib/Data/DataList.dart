@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'RuntimeData.dart';
-import 'main.dart';
+import '../main.dart';
 
 class DataList{
 

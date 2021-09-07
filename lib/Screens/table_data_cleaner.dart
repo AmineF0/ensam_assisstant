@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../DataList.dart';
+import '../Data/DataList.dart';
 import 'Item.dart';
 
 class TableWidgetCleaner extends StatefulWidget {

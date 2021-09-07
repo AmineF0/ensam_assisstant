@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ensam_assisstant/browser.dart';
-import 'package:ensam_assisstant/request.dart';
+import 'package:ensam_assisstant/Tools/browser.dart';
+import 'package:ensam_assisstant/Tools/request.dart';
 import 'package:ars_progress_dialog/dialog.dart';
 
 import '../main.dart';

@@ -10,9 +10,9 @@ import 'package:flutter_session/flutter_session.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'RuntimeData.dart';
+import '../Data/RuntimeData.dart';
 import 'tools.dart';
-import 'main.dart';
+import '../main.dart';
 
 String urlLogOut = "http://schoolapp.ensam-umi.ac.ma/schoolapp/logout";
 String urlLog = "http://schoolapp.ensam-umi.ac.ma/schoolapp/login";
