@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Data/RuntimeData.dart';
 import 'package:splashscreen/splashscreen.dart';
+
+import 'Data/RuntimeData.dart';
 import 'Screens/SignInOne.dart';
 import 'Screens/mainGUI.dart';
+import 'Tools/backgroundFetch.dart';
+import 'Tools/notifications.dart';
 
 late RuntimeData data;
 

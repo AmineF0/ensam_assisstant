@@ -1,18 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:ensam_assisstant/main.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ensam_assisstant/Tools/user_data.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:flutter_session/flutter_session.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../Data/RuntimeData.dart';
 import 'tools.dart';
-import '../main.dart';
 
 String urlLogOut = "http://schoolapp.ensam-umi.ac.ma/schoolapp/logout";
 String urlLog = "http://schoolapp.ensam-umi.ac.ma/schoolapp/login";
@@ -22,9 +17,10 @@ var dio = new Dio();
 var cookieJar = new CookieJar();
 
 remember(String email, String pass) async {
-  var session = FlutterSession();
-  await session.set("email", email);
-  await session.set("pass", pass);
+  var session = UserData();
+  await session.init();
+  session.set("email", email);
+  session.set("pass", pass);
 }
 
 Future<bool> checkCred(String email, String pass, bool rememb) async {
@@ -46,8 +42,8 @@ Future<bool> getInfo(var dataLoad) async {
       ?.outerHtml
       .split("value=\"")[1]
       .split("\"")[0];
-  if (cookieJar.loadForRequest(Uri.parse(url)).isEmpty) {
-    var sess = form.headers.value("set-cookie").split(";")[0].split("=")[1];
+  if ((await cookieJar.loadForRequest(Uri.parse(url))).isEmpty) {
+    var sess = form.headers.value("set-cookie")!.split(";")[0].split("=")[1];
     Cookie c = new Cookie("JSESSIONID", sess);
     cookieJar.saveFromResponse(Uri.parse(url), [c]);
   }
@@ -61,11 +57,11 @@ Future<bool> getInfo(var dataLoad) async {
       options: Options(
           followRedirects: false,
           validateStatus: (status) {
-            return status < 400;
+            return status! < 400;
           }),
     );
     var fin = await dio.get("http://schoolapp.ensam-umi.ac.ma/schoolapp/index");
-    return !fin.isRedirect;
+    return !fin.isRedirect!;
   } catch (e) {
     return false;
   }
@@ -96,7 +92,7 @@ Future<Document?> postHTML(url, dataLoad) async {
       options: Options(
           followRedirects: true,
           validateStatus: (status) {
-            return status < 400;
+            return status! < 400;
           }),
     );
     //debugPrint(parse(log.data).);

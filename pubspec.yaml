@@ -21,9 +21,8 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  dio: ^3.0.10
-  flutter_platform_widgets: ^1.7.1
-  flutter_session: ^0.1.1
+  dio: ^4.0.0
+  flutter_platform_widgets: ^1.9.5
   ars_progress_dialog: 0.0.1
   adaptive_dialog: ^0.10.0+5
   flutter_zoom_drawer: ^2.1.0
@@ -33,11 +32,10 @@ dependencies:
   animated_dialog_box: ^0.0.2
   html: ^0.15.0
   image: ^3.0.2
-  easy_localization: ^2.3.3+1
-  dio_cookie_manager: ^1.0.0
+  dio_cookie_manager: ^2.0.0
   url_launcher: ^6.0.3
   provider: ^5.0.0
-  path_provider:
+  path_provider: ^2.0.3
   csv: 5.0.0
   flutter:
     sdk: flutter
@@ -46,6 +44,14 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  workmanager: ^0.4.1
+  flutter_local_notifications: ^8.2.0
+  flutter_device_info: ^0.0.1
+  http: ^0.13.3
+  flutter_native_timezone: ^2.0.0
+  rxdart: ^0.27.2
+  device_info: ^2.0.2
+  shared_preferences: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +70,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - Assets/image1.png
+    - Assets/
     - Assets/image2.png
     - Assets/ENSAM-meknes-compus.jpg
     - Assets/tese.pdf

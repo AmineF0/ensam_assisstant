@@ -51,7 +51,6 @@ class PageStructure extends StatelessWidget {
     );
 
     final container = tmpCnt;
-    print(container.child.key);
     final color = Theme.of(context).accentColor;
     final style = TextStyle(color: color);
 
