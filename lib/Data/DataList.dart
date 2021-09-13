@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'RuntimeData.dart';
 import '../main.dart';
 
+//TODO redesign data
 class DataList {
   late String identifier;
   late List header;
