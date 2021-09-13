@@ -6,8 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../Data/RuntimeData.dart';
 import 'package:ensam_assisstant/main.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -40,7 +38,6 @@ class _MenuScreenState extends State<MenuScreen> {
         : Platform.isAndroid
         ? androidStyle
         : iosStyle;
-    final directory = getApplicationDocumentsDirectory();
 
     return Scaffold(
       body: Container(
@@ -63,7 +60,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 24.0, left: 24.0, right: 24.0),
                 child: Image.file(
-                  File(RuntimeData.directory.path+'/img.jpeg'),
+                  File(data.directory.path+'/img.jpeg'),
                   width: 90,
                   height: 90,
                 ),

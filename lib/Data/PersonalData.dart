@@ -1,7 +1,10 @@
-
+import 'ModulesInfo.dart';
 import 'package:ensam_assisstant/Data/DataList.dart';
 import 'package:html/dom.dart';
 import '../Tools/request.dart';
+import 'UnprocessableMarks.dart';
+import 'Modules.dart';
+import 'Elements.dart';
 
 class PersonalData {
 

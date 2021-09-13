@@ -1,13 +1,14 @@
 import 'package:ensam_assisstant/Data/PersonalData.dart';
+import 'package:ensam_assisstant/Tools/fileManagement.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RuntimeData {
-  static var directory;
-  static late UserData session;
+  var directory;
+  late UserData session = new UserData();
   var db;
-  var log = "";
+  var log;
   late PersonalData pInfo;
 
   RuntimeData();
@@ -15,15 +16,13 @@ class RuntimeData {
   loadDirectory() async => directory = await getApplicationDocumentsDirectory();
 
   Future<bool> loadSession() async {
-    session = new UserData();
     await session.init();
 
     print(session.get("test"));
     session.set("test", "hello");
     print(session.get("test"));
 
-    String email = session.get("email"),
-        password = session.get("pass");
+    String email = session.get("email"), password = session.get("pass");
 
     //TODO: remove
     //email = "aminefirdawsi@outlook.com";
@@ -43,13 +42,13 @@ class RuntimeData {
     pInfo = await PersonalData.create();
     pInfo.markCurrent.process();
     pInfo.moduleCurrent.process();
-    log = await pInfo.markCurrent.loadFromFile();
-    await pInfo.markCurrent.SaveToFile();
+    await pInfo.markCurrent.update();
+    await getLog();
   }
 
   Future<void> loadFromMemory() async {
     pInfo = await PersonalData.create();
-    pInfo.markCurrent.SaveToFile();
+    pInfo.markCurrent.load();
   }
 
   getName() {
@@ -58,5 +57,7 @@ class RuntimeData {
         pInfo.personal["Prénom "].toString();
   }
 
-  getLog() {}
+  getLog() async {
+    log= await loadFromFile("logs/change_log");
+  }
 }

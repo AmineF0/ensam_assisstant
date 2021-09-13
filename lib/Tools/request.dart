@@ -6,8 +6,8 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:cookie_jar/cookie_jar.dart';
 
-import '../Data/RuntimeData.dart';
-import 'tools.dart';
+import 'package:ensam_assisstant/main.dart';
+import 'logging.dart';
 
 String urlLogOut = "http://schoolapp.ensam-umi.ac.ma/schoolapp/logout";
 String urlLog = "http://schoolapp.ensam-umi.ac.ma/schoolapp/login";
@@ -17,10 +17,8 @@ var dio = new Dio();
 var cookieJar = new CookieJar();
 
 remember(String email, String pass) async {
-  var session = UserData();
-  await session.init();
-  session.set("email", email);
-  session.set("pass", pass);
+  data.session.set("email", email);
+  data.session.set("pass", pass);
 }
 
 Future<bool> checkCred(String email, String pass, bool rememb) async {
@@ -103,9 +101,10 @@ Future<Document?> postHTML(url, dataLoad) async {
   }
 }
 
+//TODO invistigate use
 downloadFile(host, link, location) async {
   Response res =
-      await dio.download(host + link, RuntimeData.directory.path + location);
+      await dio.download(host + link, data.directory.path + location);
 }
 
 forgetConnection() async {

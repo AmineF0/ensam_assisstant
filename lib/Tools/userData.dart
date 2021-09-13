@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ensam_assisstant/Tools/tools.dart';
+import 'package:ensam_assisstant/Tools/logging.dart';
 
 import 'fileManagement.dart';
 
@@ -23,7 +23,7 @@ class UserData {
 
   void set(String s, String t) {
     userData[s] = t;
-    SaveToFile(jsonEncode([userData]), fileName);
+    saveToFile(jsonEncode([userData]), fileName);
   }
 
   get(String s) {

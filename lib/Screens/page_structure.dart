@@ -39,7 +39,7 @@ class PageStructure extends StatelessWidget {
       color: Colors.grey[300],
       child: RichText(
         text: TextSpan(
-          text: data.log,
+          text: "Changes :\r\n"+data.log,
           style: DefaultTextStyle.of(context).style
         )
 
