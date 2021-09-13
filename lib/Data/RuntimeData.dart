@@ -1,11 +1,11 @@
 import 'package:ensam_assisstant/Data/PersonalData.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
-import 'package:flutter_session/flutter_session.dart';
+import 'package:ensam_assisstant/Tools/user_data.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RuntimeData {
   static var directory;
-  static late FlutterSession session;
+  static late UserData session;
   var db;
   var log = "";
   late PersonalData pInfo;
@@ -15,16 +15,22 @@ class RuntimeData {
   loadDirectory() async => directory = await getApplicationDocumentsDirectory();
 
   Future<bool> loadSession() async {
-    session = new FlutterSession();
-    String email = await session.get("email"),
-        password = await session.get("pass");
+    session = new UserData();
+    await session.init();
+
+    print(session.get("test"));
+    session.set("test", "hello");
+    print(session.get("test"));
+
+    String email = session.get("email"),
+        password = session.get("pass");
 
     //TODO: remove
-    email = "aminefirdawsi@outlook.com";
-    password = "I'minchina";
+    //email = "aminefirdawsi@outlook.com";
+    //password = "I'minchina";
 
     if (email == "" || password == "") return false;
-    return Future.value(checkCred(email, password, false));
+    return Future.value(checkCred(email, password, true));
   }
 
   Future<void> forgetCred() async {
