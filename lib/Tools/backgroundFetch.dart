@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ensam_assisstant/Data/RuntimeData.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'notifications.dart';
 import 'package:workmanager/workmanager.dart';
 
 const simpleTaskKey = "simpleTask";
@@ -12,16 +14,25 @@ const simpleDelayedTask = "simpleDelayedTask";
 const simplePeriodicTask = "simplePeriodicTask";
 const simplePeriodic1HourTask = "simplePeriodic1HourTask";
 
-initBgFetch(){
-  Workmanager().initialize(
-      callbackDispatcher,
-  );
+initBgFetch() {
+  //initNotif();
+  //showNotification("start");
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
-   Workmanager().registerPeriodicTask(
-      "5",
-      simplePeriodic1HourTask,
-      frequency: Duration(minutes: 10),
-   );
+  Workmanager().registerPeriodicTask("3", simplePeriodicTask,
+      initialDelay: Duration(seconds: 10), frequency: Duration(minutes: 15));
+}
+
+bgFetch() async {
+  print('fetch');
+  RuntimeData data = new RuntimeData();
+  await data.loadDirectory();
+  var rs = await data.loadSession();
+  if (rs) {
+    await data.load();
+    //initNotif();
+    //showNotification(data.getNotification());
+  }
 }
 
 void callbackDispatcher() {
@@ -52,6 +63,7 @@ void callbackDispatcher() {
         break;
       case simplePeriodicTask:
         print("$simplePeriodicTask was executed");
+        bgFetch();
         break;
       case simplePeriodic1HourTask:
         print("$simplePeriodic1HourTask was executed");

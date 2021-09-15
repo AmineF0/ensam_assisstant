@@ -63,7 +63,7 @@ class DataList {
           element[1] +
           ") \r\n";
     });
-    await printDataChangeLog(strChange);
+    if(!(strChange.compareTo("")==0)) printDataChangeLog(strChange);
   }
 
   checkChange() {

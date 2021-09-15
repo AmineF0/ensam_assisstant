@@ -12,7 +12,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 
 
-  Future<void> _showNotification() async {
+  Future<void> showNotification(String text) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'your channel id', 'your channel name', 'your channel description',
@@ -22,11 +22,11 @@ import 'package:timezone/timezone.dart' as tz;
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics,
+        0, 'plain title', "messsage : "+text, platformChannelSpecifics,
         payload: 'item x');
   }
 
-  Future<void> _showGroupedNotifications() async {
+  Future<void> showGroupedNotifications() async {
     const String groupKey = 'com.android.example.WORK_EMAIL';
     const String groupChannelId = 'grouped channel id';
     const String groupChannelName = 'grouped channel name';

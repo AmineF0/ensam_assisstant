@@ -8,7 +8,7 @@ import 'Screens/mainGUI.dart';
 import 'Tools/backgroundFetch.dart';
 import 'Tools/notifications.dart';
 
-late RuntimeData data;
+RuntimeData data  = new RuntimeData();
 
 void main() {
   runApp(new MaterialApp(
@@ -23,11 +23,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<Widget> loadFromFuture() async {
-    data = new RuntimeData();
     await data.loadDirectory();
     var rs = await data.loadSession();
     if (rs) {
       await data.load();
+      initBgFetch();
       return Future.value(new Home());
     } else
       return Future.value(new SignIn());

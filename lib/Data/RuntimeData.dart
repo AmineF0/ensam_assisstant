@@ -18,10 +18,6 @@ class RuntimeData {
   Future<bool> loadSession() async {
     await session.init();
 
-    print(session.get("test"));
-    session.set("test", "hello");
-    print(session.get("test"));
-
     String email = session.get("email"), password = session.get("pass");
 
     //TODO: remove
@@ -58,6 +54,11 @@ class RuntimeData {
   }
 
   getLog() async {
-    log= await loadFromFile("logs/change_log");
+    log = await loadFromFile("logs/change_log");
+  }
+
+  //tmp function
+  getNotification() {
+    return 'test';
   }
 }
