@@ -7,6 +7,7 @@ class DataList {
   late List header;
   late List<List> body;
   late List<List> memBody = [];
+  List<List> change = [];
   late int indexPos;
 
   DataList(String identifier, List header, List<List> body, int indexPos) {
@@ -44,10 +45,12 @@ class DataList {
 
   load() async => memBody = csvToList(await loadFromFile(identifier));
 
-  update() async {
+  Future<List<List>> update() async {
     await load();
-    await printToLog(checkChange());
+    change = checkChange();
+    await printToLog(change);
     await save();
+    return change;
   }
 
   printToLog(List<List> change) async {
@@ -63,7 +66,7 @@ class DataList {
           element[1] +
           ") \r\n";
     });
-    if (!(strChange.compareTo("") == 0)) printDataChangeLog(strChange);
+    if (!(strChange.compareTo("") == 0)) await printDataChangeLog(strChange);
   }
 
   checkChange() {

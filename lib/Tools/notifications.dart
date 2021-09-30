@@ -26,7 +26,7 @@ import 'package:timezone/timezone.dart' as tz;
         payload: 'item x');
   }
 
-  Future<void> showGroupedNotifications() async {
+  Future<void> showGroupedNotifications(List<String> notifs) async {
     const String groupKey = 'com.android.example.WORK_EMAIL';
     const String groupChannelId = 'grouped channel id';
     const String groupChannelName = 'grouped channel name';

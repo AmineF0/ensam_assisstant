@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:workmanager/workmanager.dart';
 
-import '../main.dart';
+import '../../main.dart';
+
+//improve design Scaffold
 
 class SettingsScreen extends StatefulWidget {
   @override

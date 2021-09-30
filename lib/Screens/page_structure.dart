@@ -9,9 +9,10 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
 
 
+import 'Pages/AboutUs.dart';
 import 'mainGUI.dart';
 import 'table_data_cleaner.dart';
-import 'SettingsScreen.dart';
+import 'Pages/SettingsScreen.dart';
 
 import '../main.dart';
 
@@ -49,6 +50,7 @@ class PageStructure extends StatelessWidget {
       ),
     );
     else if(_currentPage == 5) tmpCnt = SettingsScreen();
+    else if(_currentPage == 6) tmpCnt = AboutUs();
     else tmpCnt = Container(
       color: Colors.grey[300],
       child: new TableWidgetCleaner(key: Key(_currentPage.toString()) ,dl: HomeScreen.mainMenu[_currentPage].dataList),

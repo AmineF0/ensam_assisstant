@@ -13,6 +13,7 @@ class RuntimeData {
   var db;
   var log;
   late PersonalData pInfo;
+  List<List> change = [];
 
   RuntimeData();
 
@@ -47,15 +48,31 @@ class RuntimeData {
 
   Future<void> load() async {
     pInfo = await PersonalData.create();
+
     pInfo.markCurrent.process();
     pInfo.moduleCurrent.process();
-    await pInfo.markCurrent.update();
+
+    change.addAll(await pInfo.markCurrent.update());
+    change.addAll(await pInfo.moduleCurrent.update());
+
     await getLog();
   }
 
   Future<void> loadFromMemory() async {
     pInfo = await PersonalData.create();
     pInfo.markCurrent.load();
+  }
+
+  loadMinimal() async {
+    pInfo = await PersonalData.createMinimal();
+
+    pInfo.markCurrent.process();
+    pInfo.moduleCurrent.process();
+
+    change.addAll(await pInfo.markCurrent.update());
+    change.addAll(await pInfo.moduleCurrent.update());
+
+    await getLog();
   }
 
   getName() {
@@ -71,6 +88,20 @@ class RuntimeData {
 
   //tmp function
   getNotification() {
-    return 'test' + DateTime.now().toString();
+    List<String> notifs = [];
+    change.forEach((element) {
+      notifs.add("[" +
+          DateTime.now().toString() +
+          "] " +
+          element[0][0] +
+          "(" +
+          element[2] +
+          ":" +
+          element[1] +
+          ")"
+      );
+    });
+    return notifs;
   }
+
 }

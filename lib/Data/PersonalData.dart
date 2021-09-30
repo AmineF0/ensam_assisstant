@@ -35,15 +35,33 @@ class PersonalData {
     return p;
   }
 
+  static Future<PersonalData> createMinimal() async{
+    var p = PersonalData._();
+    await p.loadMinimalHtml();
+    return p;
+  }
+
   loadHtml() async {
     await loadInfo();
     //await loadAbsence();
     await loadMarksCurrent();
     await loadModuleCurrent();
-    await loadMarksAbs();
-    await loadModuleAbs();
-    await loadSemester();
-    await loadYear();
+    //await loadMarksAbs();
+    //await loadModuleAbs();
+    //await loadSemester();
+    //await loadYear();
+    await loadModList();
+  }
+  
+
+  loadMinimalHtml() async {
+    //await loadAbsence();
+    await loadMarksCurrent();
+    await loadModuleCurrent();
+    //await loadMarksAbs();
+    //await loadModuleAbs();
+    //await loadSemester();
+    //await loadYear();
     await loadModList();
   }
 

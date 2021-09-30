@@ -6,6 +6,7 @@ import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 import 'notifications.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -28,37 +29,32 @@ initBgFetch() {
 
 bgFetch() async {
   try {
-    print('fetch');
-    RuntimeData data = new RuntimeData();
-    print('fetchd');
+    //try main data
+    data = new RuntimeData();
     await data.loadDirectory();
-    print('fetchf');
-    print(" dir" + data.directory.toString());
     var rs = await data.loadSession();
-    print(rs);
-    print(DateTime.now().toString());
-    print(" dir" + data.directory.toString());
     await printActivityLog(
         "[" + DateTime.now().toString() + "] " + " : fetch bg");
-    print('fetchg');
     if (!data.session.get(UserData.backgroundFetch)) {
       await printActivityLog(
           "[" + DateTime.now().toString() + "] " + " : cancel workman");
       await Workmanager().cancelAll();
       return;
     }
-    print(rs);
     if (rs) {
       await printActivityLog("[" +
           DateTime.now().toString() +
           "] " +
           " : valid work man and fetch");
-      await data.load();
+      await data.loadMinimal();
       if (data.session.get(UserData.notification)) {
         await printActivityLog(
             "[" + DateTime.now().toString() + "] " + " : notifying");
         await initNotif();
-        await showNotification(data.getNotification());
+        List<String> notifs = data.getNotification();
+        if (notifs.length == 0) await showNotification("notifs[0]");
+        else if (notifs.length == 1) await showNotification(notifs[0]);
+        //else await showNotification(notifs); fix later
       }
     }
   } catch (e) {
@@ -73,9 +69,7 @@ void callbackDispatcher() {
     switch (task) {
       case simpleTaskKey:
         print("$simpleTaskKey was executed. inputData = $inputData");
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setBool("test", true);
-        print("Bool from prefs: ${prefs.getBool("test")}");
+        await bgFetch();
         break;
       case rescheduledTaskKey:
         final key = inputData!['key']!;
