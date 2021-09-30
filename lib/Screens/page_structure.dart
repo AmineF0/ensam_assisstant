@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'dart:math' show pi;
 
-import 'package:ensam_assisstant/Screens/mainGUI.dart';
-import 'package:ensam_assisstant/Screens/table_data_cleaner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
+
+
+import 'mainGUI.dart';
+import 'table_data_cleaner.dart';
+import 'SettingsScreen.dart';
 
 import '../main.dart';
 
@@ -45,6 +48,7 @@ class PageStructure extends StatelessWidget {
 
       ),
     );
+    else if(_currentPage == 5) tmpCnt = SettingsScreen();
     else tmpCnt = Container(
       color: Colors.grey[300],
       child: new TableWidgetCleaner(key: Key(_currentPage.toString()) ,dl: HomeScreen.mainMenu[_currentPage].dataList),
@@ -103,4 +107,3 @@ class PageStructure extends StatelessWidget {
     );
   }
 }
-

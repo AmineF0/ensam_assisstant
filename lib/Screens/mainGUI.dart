@@ -13,7 +13,8 @@ class HomeScreen extends StatefulWidget {
     MenuItem("Modules Marks", Icons.help, 2, data.pInfo.moduleCurrent),
     MenuItem("Nonattendance", Icons.card_giftcard, 3, data.pInfo.markCurrent),
     MenuItem("Notifications", Icons.notifications, 4, data.pInfo.markCurrent),
-    MenuItem("About Us", Icons.info_outline, 5, data.pInfo.markCurrent),
+    MenuItem("Settings", Icons.settings, 5, data.pInfo.markCurrent),
+    MenuItem("About Us", Icons.info_outline, 6, data.pInfo.markCurrent),
   ];
 
   @override

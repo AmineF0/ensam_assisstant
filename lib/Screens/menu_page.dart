@@ -60,7 +60,7 @@ class _MenuScreenState extends State<MenuScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 24.0, left: 24.0, right: 24.0),
                 child: Image.file(
-                  File(data.directory.path+'/img.jpeg'),
+                  File(data.directory!.path+'/img.jpeg'),
                   width: 90,
                   height: 90,
                 ),

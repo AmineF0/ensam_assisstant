@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ensam_assisstant/Data/RuntimeData.dart';
+import 'package:ensam_assisstant/Tools/logging.dart';
+import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'notifications.dart';
@@ -15,23 +17,54 @@ const simplePeriodicTask = "simplePeriodicTask";
 const simplePeriodic1HourTask = "simplePeriodic1HourTask";
 
 initBgFetch() {
-  //initNotif();
-  //showNotification("start");
+  printActivityLog("[" + DateTime.now().toString() + "] " + " : init work man");
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
-  Workmanager().registerPeriodicTask("3", simplePeriodicTask,
-      initialDelay: Duration(seconds: 10), frequency: Duration(minutes: 15));
+  Workmanager().registerPeriodicTask("2", simplePeriodicTask,
+      constraints: Constraints(networkType: NetworkType.connected),
+      initialDelay: Duration(seconds: 10),
+      frequency: Duration(minutes: 15));
 }
 
 bgFetch() async {
-  print('fetch');
-  RuntimeData data = new RuntimeData();
-  await data.loadDirectory();
-  var rs = await data.loadSession();
-  if (rs) {
-    await data.load();
-    //initNotif();
-    //showNotification(data.getNotification());
+  try {
+    print('fetch');
+    RuntimeData data = new RuntimeData();
+    print('fetchd');
+    await data.loadDirectory();
+    print('fetchf');
+    print(" dir" + data.directory.toString());
+    var rs = await data.loadSession();
+    print(rs);
+    print(DateTime.now().toString());
+    print(" dir" + data.directory.toString());
+    await printActivityLog(
+        "[" + DateTime.now().toString() + "] " + " : fetch bg");
+    print('fetchg');
+    if (!data.session.get(UserData.backgroundFetch)) {
+      await printActivityLog(
+          "[" + DateTime.now().toString() + "] " + " : cancel workman");
+      await Workmanager().cancelAll();
+      return;
+    }
+    print(rs);
+    if (rs) {
+      await printActivityLog("[" +
+          DateTime.now().toString() +
+          "] " +
+          " : valid work man and fetch");
+      await data.load();
+      if (data.session.get(UserData.notification)) {
+        await printActivityLog(
+            "[" + DateTime.now().toString() + "] " + " : notifying");
+        await initNotif();
+        await showNotification(data.getNotification());
+      }
+    }
+  } catch (e) {
+    print(e);
+    await printActivityLog(
+        "[" + DateTime.now().toString() + "] " + " : err " + e.toString());
   }
 }
 
@@ -63,7 +96,7 @@ void callbackDispatcher() {
         break;
       case simplePeriodicTask:
         print("$simplePeriodicTask was executed");
-        bgFetch();
+        await bgFetch();
         break;
       case simplePeriodic1HourTask:
         print("$simplePeriodic1HourTask was executed");

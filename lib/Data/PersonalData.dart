@@ -54,8 +54,9 @@ class PersonalData {
     var table = div.querySelectorAll('[class="table table-striped table-sm"]');
     for(var tab in table) {
       for (var t in tab.getElementsByTagName('tr')) {
-        var tmp = t.getElementsByTagName('td');
-        personal[tmp[0].innerHtml]=tmp[1].innerHtml;
+        var th = t.getElementsByTagName('th');
+        var td = t.getElementsByTagName('td');
+        personal[th[0].innerHtml]=td[0].innerHtml;
       }
     }
     downloadFile("http://schoolapp.ensam-umi.ac.ma", personal['img'],"/img.jpeg");

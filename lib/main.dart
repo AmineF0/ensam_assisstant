@@ -1,3 +1,5 @@
+import 'package:ensam_assisstant/Tools/logging.dart';
+import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -8,7 +10,11 @@ import 'Screens/mainGUI.dart';
 import 'Tools/backgroundFetch.dart';
 import 'Tools/notifications.dart';
 
-RuntimeData data  = new RuntimeData();
+//TODO: setting page
+//TODO: fix notif
+//TODO: theme support
+
+RuntimeData data = new RuntimeData();
 
 void main() {
   runApp(new MaterialApp(
@@ -25,9 +31,12 @@ class _MyAppState extends State<MyApp> {
   Future<Widget> loadFromFuture() async {
     await data.loadDirectory();
     var rs = await data.loadSession();
+      printActivityLog("[" +
+          DateTime.now().toString() +
+          "] " +" : app start");
     if (rs) {
       await data.load();
-      initBgFetch();
+      if (data.session.get(UserData.backgroundFetch)) initBgFetch();
       return Future.value(new Home());
     } else
       return Future.value(new SignIn());

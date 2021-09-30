@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:ensam_assisstant/Data/PersonalData.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
+import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RuntimeData {
-  var directory;
+  Directory? directory;
   late UserData session = new UserData();
   var db;
   var log;
@@ -16,16 +19,24 @@ class RuntimeData {
   loadDirectory() async => directory = await getApplicationDocumentsDirectory();
 
   Future<bool> loadSession() async {
-    await session.init();
+    try {
+      print("here");
+      directory ??= await getApplicationDocumentsDirectory();
+      print("dd" + directory.toString());
+      await session.init();
 
-    String email = session.get("email"), password = session.get("pass");
+      String email = session.get("email"), password = session.get("pass");
 
-    //TODO: remove
-    //email = "aminefirdawsi@outlook.com";
-    //password = "I'minchina";
+      //TODO: remove
+      //email = "aminefirdawsi@outlook.com";
+      //password = "I'minchina";
 
-    if (email == "" || password == "") return false;
-    return Future.value(checkCred(email, password, true));
+      if (email == "" || password == "") return false;
+      return Future.value(checkCred(email, password, true));
+    } catch (e) {
+      print(e);
+      return Future.value(false);
+    }
   }
 
   Future<void> forgetCred() async {
@@ -54,11 +65,12 @@ class RuntimeData {
   }
 
   getLog() async {
-    log = await loadFromFile("logs/change_log");
+    //log = await loadFromFile("logs/change_log");
+    log = await loadFromFile(activityLog);
   }
 
   //tmp function
   getNotification() {
-    return 'test';
+    return 'test' + DateTime.now().toString();
   }
 }

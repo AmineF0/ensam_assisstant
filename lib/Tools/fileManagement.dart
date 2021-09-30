@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ensam_assisstant/main.dart';
+import 'package:path_provider/path_provider.dart';
 
 loadFromFile(String identifier) async {
-  File file = new File(data.directory.path + '/storage/' + identifier);
+  Directory directory = data.directory ?? (await getApplicationDocumentsDirectory());
+  File file = new File(directory.path + '/storage/' + identifier);
   try {
     return await file.readAsString(encoding: utf8);
   } catch (e) {
@@ -13,7 +15,8 @@ loadFromFile(String identifier) async {
 }
 
 saveToFile(String text, String identifier) async {
-  File file = new File(data.directory.path + '/storage/' + identifier);
+  Directory directory = data.directory ?? (await getApplicationDocumentsDirectory());
+  File file = new File(directory.path + '/storage/' + identifier);
   if (!await file.exists()) await file.create(recursive: true);
   await file.writeAsString(text);
 }

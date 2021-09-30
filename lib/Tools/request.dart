@@ -104,7 +104,7 @@ Future<Document?> postHTML(url, dataLoad) async {
 //TODO invistigate use
 downloadFile(host, link, location) async {
   Response res =
-      await dio.download(host + link, data.directory.path + location);
+      await dio.download(host + link, data.directory!.path + location);
 }
 
 forgetConnection() async {

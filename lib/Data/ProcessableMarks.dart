@@ -54,7 +54,7 @@ abstract class ProcessableMarks extends DataList {
           it[1] +
           ") \n";
     }
-    printDataChangeLog(strChange);
+    if (!(strChange.compareTo("") == 0)) printDataChangeLog(strChange);
   }
 
 
