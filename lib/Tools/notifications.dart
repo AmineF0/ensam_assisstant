@@ -10,82 +10,65 @@ import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+Future<void> showNotification(List<String> text) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+          'your channel id', 'your channel name', 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker');
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin
+      .show(0, text[0], text[1], platformChannelSpecifics, payload: 'item x');
+}
 
+Future<void> showGroupedNotifications(List<List<String>> notifs) async {
+  const String groupKey = 'com.android.example.WORK_EMAIL';
+  const String groupChannelId = 'grouped channel id';
+  const String groupChannelName = 'grouped channel name';
+  const String groupChannelDescription = 'grouped channel description';
 
-  Future<void> showNotification(String text) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', "messsage : "+text, platformChannelSpecifics,
-        payload: 'item x');
-  }
+  List<String> lines = <String>[];
 
-  Future<void> showGroupedNotifications(List<String> notifs) async {
-    const String groupKey = 'com.android.example.WORK_EMAIL';
-    const String groupChannelId = 'grouped channel id';
-    const String groupChannelName = 'grouped channel name';
-    const String groupChannelDescription = 'grouped channel description';
-    // example based on https://developer.android.com/training/notify-user/group.html
-    const AndroidNotificationDetails firstNotificationAndroidSpecifics =
-        AndroidNotificationDetails(
-            groupChannelId, groupChannelName, groupChannelDescription,
-            importance: Importance.max,
-            priority: Priority.high,
-            groupKey: groupKey);
-    const NotificationDetails firstNotificationPlatformSpecifics =
-        NotificationDetails(android: firstNotificationAndroidSpecifics);
-    await flutterLocalNotificationsPlugin.show(1, 'Alex Faarborg',
-        'You will not believe...', firstNotificationPlatformSpecifics);
-    const AndroidNotificationDetails secondNotificationAndroidSpecifics =
+  for (int i = 0; i < notifs.length; i++) {
+    const AndroidNotificationDetails NotificationAndroidSpecifics =
         AndroidNotificationDetails(
             groupChannelId, groupChannelName, groupChannelDescription,
             importance: Importance.max,
             priority: Priority.high,
             groupKey: groupKey);
-    const NotificationDetails secondNotificationPlatformSpecifics =
-        NotificationDetails(android: secondNotificationAndroidSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        2,
-        'Jeff Chang',
-        'Please join us to celebrate the...',
-        secondNotificationPlatformSpecifics);
 
-    // Create the summary notification to support older devices that pre-date
-    /// Android 7.0 (API level 24).
-    ///
-    /// Recommended to create this regardless as the behaviour may vary as
-    /// mentioned in https://developer.android.com/training/notify-user/group
-    const List<String> lines = <String>[
-      'Alex Faarborg  Check this out',
-      'Jeff Chang    Launch Party'
-    ];
-    const InboxStyleInformation inboxStyleInformation = InboxStyleInformation(
-        lines,
-        contentTitle: '2 messages',
-        summaryText: 'janedoe@example.com');
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            groupChannelId, groupChannelName, groupChannelDescription,
-            styleInformation: inboxStyleInformation,
-            groupKey: groupKey,
-            setAsGroupSummary: true);
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails NotificationPlatformSpecifics =
+        NotificationDetails(android: NotificationAndroidSpecifics);
+
     await flutterLocalNotificationsPlugin.show(
-        3, 'Attention', 'Two messages', platformChannelSpecifics);
+        i + 1, notifs[i][0], notifs[i][1], NotificationPlatformSpecifics);
+
+    lines.add('$notifs[i][0] $notifs[i][1]');
   }
 
+  // Create the summary notification to support older devices that pre-date
+  /// Android 7.0 (API level 24).
+  ///
+  /// Recommended to create this regardless as the behaviour may vary as
+  /// mentioned in https://developer.android.com/training/notify-user/group
 
-
-
-
-
+  InboxStyleInformation inboxStyleInformation = InboxStyleInformation(
+      lines,
+      contentTitle: 'messages',
+      summaryText: 'update');
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+          groupChannelId, groupChannelName, groupChannelDescription,
+          styleInformation: inboxStyleInformation,
+          groupKey: groupKey,
+          setAsGroupSummary: true);
+  NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+      3, 'Attention', 'message', platformChannelSpecifics);
+}
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -117,7 +100,7 @@ class ReceivedNotification {
   final String? payload;
 }
 
-initNotif() async{
+initNotif() async {
   await _configureLocalTimeZone();
 
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
@@ -144,7 +127,6 @@ initNotif() async{
     selectedNotificationPayload = payload;
     selectNotificationSubject.add(payload);
   });
-
 }
 
 Future<void> _configureLocalTimeZone() async {

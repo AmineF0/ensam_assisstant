@@ -25,7 +25,7 @@ class Module extends ProcessableMarks {
 
   @override
   getTableRows(int i) {
-    return List.generate(
+    /*return List.generate(
         header.length,
         (index) => TableRow(
               children: <Widget>[
@@ -42,5 +42,64 @@ class Module extends ProcessableMarks {
                 ),
               ],
             ));
+        */
+        List<TableRow> rows = [];
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                  color: Colors.blue,
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "${body[i][nameToIndex["Intitule"]!]} : ",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                    padding: EdgeInsets.all(5),
+                    child: getRichText("CodeMod", i)),
+                Container(
+                    padding: EdgeInsets.all(5), child: getRichText("AU", i)),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                    padding: EdgeInsets.all(5), child: getRichText("Moy", i)),
+                Container(
+                    padding: EdgeInsets.all(5), child: getRichText("Dec", i)),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+    return rows;
   }
 }

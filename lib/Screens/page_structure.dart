@@ -8,8 +8,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
 
-
 import 'Pages/AboutUs.dart';
+import 'Pages/NotifHistP.dart';
 import 'mainGUI.dart';
 import 'table_data_cleaner.dart';
 import 'Pages/SettingsScreen.dart';
@@ -31,30 +31,32 @@ class PageStructure extends StatelessWidget {
     this.backgroundColor,
     this.elevation,
   }) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
     final angle = 180 * pi;
-    final _currentPage = context.select<MenuProvider, int>((provider) => provider.currentPage);
+    final _currentPage =
+        context.select<MenuProvider, int>((provider) => provider.currentPage);
     var tmpCnt;
 
-    if(_currentPage == 0) tmpCnt = Container(
-      color: Colors.grey[300],
-      child: RichText(
-        text: TextSpan(
-          text: "Changes :\r\n"+data.log,
-          style: DefaultTextStyle.of(context).style
-        )
-
-      ),
-    );
-    else if(_currentPage == 5) tmpCnt = SettingsScreen();
-    else if(_currentPage == 6) tmpCnt = AboutUs();
-    else tmpCnt = Container(
-      color: Colors.grey[300],
-      child: new TableWidgetCleaner(key: Key(_currentPage.toString()) ,dl: HomeScreen.mainMenu[_currentPage].dataList),
-    );
+    if (_currentPage == 0)//TODO HOME SCREEN
+      tmpCnt = Container(
+        color: Colors.grey[300],
+        child: RichText(
+            text: TextSpan(
+                text: "Changes :\r\n" + data.log,
+                style: DefaultTextStyle.of(context).style)),
+      );
+    else if (_currentPage == 4) tmpCnt = NotifHistP();
+    else if (_currentPage == 5) tmpCnt = SettingsScreen();
+    else if (_currentPage == 6) tmpCnt = AboutUs();
+    else
+      tmpCnt = Container(
+        color: Colors.grey[300],
+        child: new TableWidgetCleaner(
+            key: Key(_currentPage.toString()),
+            dl: HomeScreen.mainMenu[_currentPage].dataList),
+      );
 
     final container = tmpCnt;
     final color = Theme.of(context).accentColor;
@@ -102,10 +104,10 @@ class PageStructure extends StatelessWidget {
       body: kIsWeb
           ? container
           : Platform.isAndroid
-          ? container
-          : SafeArea(
-        child: container,
-      ),
+              ? container
+              : SafeArea(
+                  child: container,
+                ),
     );
   }
 }

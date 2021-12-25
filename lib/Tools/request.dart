@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:cookie_jar/cookie_jar.dart';
@@ -31,6 +30,8 @@ Future<bool> getInfo(var dataLoad) async {
   String url = "http://schoolapp.ensam-umi.ac.ma/schoolapp/login";
 
   dio.interceptors.add(CookieManager(cookieJar));
+  dio.options.connectTimeout = 10000;
+  print(dio.options.receiveTimeout);
   // second request with the cookie
 
   var form = await dio.get(url);
@@ -52,15 +53,15 @@ Future<bool> getInfo(var dataLoad) async {
     var log = await dio.post(
       url,
       data: formData,
-      options: Options(
-          followRedirects: false,
-          validateStatus: (status) {
-            return status! < 400;
-          }),
+      options:
+          Options(
+            followRedirects: false, validateStatus: (status) => true),
     );
+    print(log);
     var fin = await dio.get("http://schoolapp.ensam-umi.ac.ma/schoolapp/index");
     return !fin.isRedirect!;
   } catch (e) {
+    print(e);
     return false;
   }
 }

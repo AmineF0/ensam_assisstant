@@ -35,33 +35,44 @@ bgFetch() async {
     var rs = await data.loadSession();
     await printActivityLog(
         "[" + DateTime.now().toString() + "] " + " : fetch bg");
+
     if (!data.session.get(UserData.backgroundFetch)) {
       await printActivityLog(
           "[" + DateTime.now().toString() + "] " + " : cancel workman");
       await Workmanager().cancelAll();
       return;
     }
+
     if (rs) {
       await printActivityLog("[" +
           DateTime.now().toString() +
           "] " +
           " : valid work man and fetch");
       await data.loadMinimal();
-      if (data.session.get(UserData.notification)) {
-        await printActivityLog(
-            "[" + DateTime.now().toString() + "] " + " : notifying");
-        await initNotif();
-        List<String> notifs = data.getNotification();
-        if (notifs.length == 0) await showNotification("notifs[0]");
-        else if (notifs.length == 1) await showNotification(notifs[0]);
-        //else await showNotification(notifs); fix later
-      }
+
+      if (data.session.get(UserData.notification)) await pushNotification();
     }
   } catch (e) {
-    print(e);
     await printActivityLog(
         "[" + DateTime.now().toString() + "] " + " : err " + e.toString());
   }
+}
+
+pushNotification() async {
+  await printActivityLog(
+      "[" + DateTime.now().toString() + "] " + " : notifying");
+
+  await initNotif();
+
+  await printActivityLog(
+      "[ : bb");
+
+  List<List<String>> notifs = data.getNotification();
+  await printActivityLog(
+      "[ : bb");
+  if (notifs.length == 0)return;
+  else if (notifs.length == 1) await showNotification(notifs[0]);
+  else await showGroupedNotifications(notifs);
 }
 
 void callbackDispatcher() {

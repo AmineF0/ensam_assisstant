@@ -5,9 +5,6 @@ import 'package:settings_ui/settings_ui.dart';
 
 import '../../main.dart';
 
-//TODO: fix design to stateless
-// fill with data
-
 class AboutUs extends StatefulWidget {
   @override
   _AboutUsState createState() => _AboutUsState();
@@ -19,9 +16,8 @@ class _AboutUsState extends State<AboutUs> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('about us')),
-      body: buildSettingsList(),
+    return Container(
+      child: buildSettingsList(),
     );
   }
 

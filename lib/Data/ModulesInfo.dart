@@ -1,4 +1,9 @@
-class ModList {
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:html/parser.dart';
+
+/*class ModList {
   String identifier = "Def";
   Map modules = {};
 
@@ -57,6 +62,26 @@ class ModList {
   ModList.loadDataTable(identifier, dataTable) {
     this.identifier = identifier;
     loadTable(dataTable);
+  }
+
+  findElem(String code) {
+    String mod = code.substring(0, code.lastIndexOf("_"));
+    if (modules.containsKey(mod)) return modules[mod]["elem"][code];
+    return {"Intitule": mod};
+  }
+
+  findMod(String mod) {
+    if (modules.containsKey(mod)) return modules[mod];
+    return {"Intitule": mod};
+  }
+}*/
+
+class ModList {
+  Map modules = {};
+
+  loadmods() async {
+    String modText = await rootBundle.loadString('Assets/modsList.json');
+    modules=json.decode(modText)[0];
   }
 
   findElem(String code) {

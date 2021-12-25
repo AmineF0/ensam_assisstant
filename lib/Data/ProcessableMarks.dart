@@ -1,3 +1,4 @@
+import 'package:ensam_assisstant/Data/Change.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 
 import 'DataList.dart';
@@ -21,43 +22,24 @@ abstract class ProcessableMarks extends DataList {
 
   @override
   checkChange() {
-    List<List> change = [];
+    List<Change> change = [];
     for (int n = 0; n < body.length; n++) {
       for (int y = 0; y < header.length; y++) {
         try {
           if (body[n][y] != memBody[n][y])
-            change.add([processedBody[n], body[n][y], header[y]]);
+            change.add(new Change(
+                Change.ProcessableMarks,
+                [header[y], body[n][y]],
+                body[n][nameToIndex["Intitule"]!] + processedBody[n][0]));
         } catch (e) {
-          change.add([body[n], body[n][y], header[y]]);
+          change.add(new Change(
+              Change.ProcessableMarks, [header[y], body[n][y]], body[n][0]));
         }
       }
     }
 
     return change;
   }
-
-  @override
-  printToLog(change) async {
-    String strChange = "";
-    for (var it in change) {
-      String id = "";
-      keyColumns.forEach((element) {
-        id += it[0][element] + "-";
-      });
-      strChange += "[" +
-          DateTime.now().toString() +
-          "] " +
-          id +
-          "(" +
-          it[2] +
-          ":" +
-          it[1] +
-          ") \n";
-    }
-    if (!(strChange.compareTo("") == 0)) printDataChangeLog(strChange);
-  }
-
-
 
   getColor(i, index) {
     try {
@@ -110,6 +92,7 @@ abstract class ProcessableMarks extends DataList {
   }
 
   getTableRows(int index);
+
   getRichText(name, i) {
     return RichText(
       text: TextSpan(

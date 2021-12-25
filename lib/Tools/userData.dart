@@ -5,14 +5,20 @@ import 'package:ensam_assisstant/Tools/logging.dart';
 import 'fileManagement.dart';
 
 class UserData {
-  final String fileName = "user_data";
-  static const String notification = "notif", backgroundFetch = "bgFetch";
+  static const String fileName = "user_data";
+  static const String notification = "notif",
+      backgroundFetch = "bgFetch",
+      notificationExpiration = "notifExpir";
   Map<String, dynamic> userData = new Map();
 
   UserData();
 
   init() async {
     String jsonString = await loadFromFile(fileName);
+    if (jsonString == "") {
+      await saveToFile(jsonEncode([]), fileName);
+      return;
+    }
     try {
       userData = jsonDecode(jsonString)[0];
     } catch (e) {
@@ -21,7 +27,7 @@ class UserData {
     }
   }
 
-  void set(String s,  t) {
+  void set(String s, t) {
     userData[s] = t;
     saveToFile(jsonEncode([userData]), fileName);
   }
@@ -40,6 +46,9 @@ class UserData {
       case backgroundFetch:
         set(s, true);
         return true;
+      case notificationExpiration:
+        set(s, 1);
+        return 1;
       default:
         return "";
     }

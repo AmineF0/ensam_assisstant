@@ -8,8 +8,6 @@ import 'package:workmanager/workmanager.dart';
 
 import '../../main.dart';
 
-//improve design Scaffold
-
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -21,9 +19,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Settings UI')),
-      body: buildSettingsList(),
+    return Container(
+      child: buildSettingsList(),
     );
   }
 

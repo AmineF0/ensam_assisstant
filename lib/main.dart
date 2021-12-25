@@ -9,6 +9,7 @@ import 'Screens/SignInOne.dart';
 import 'Screens/mainGUI.dart';
 import 'Tools/backgroundFetch.dart';
 import 'Tools/notifications.dart';
+import 'Tools/getAllMods.dart';
 
 //TODO: setting page
 //TODO: fix notif
@@ -31,9 +32,7 @@ class _MyAppState extends State<MyApp> {
   Future<Widget> loadFromFuture() async {
     await data.loadDirectory();
     var rs = await data.loadSession();
-      printActivityLog("[" +
-          DateTime.now().toString() +
-          "] " +" : app start");
+    printActivityLog("[" + DateTime.now().toString() + "] " + " : app start");
     if (rs) {
       await data.load();
       if (data.session.get(UserData.backgroundFetch)) initBgFetch();

@@ -2,12 +2,14 @@ import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
 
+import 'Change.dart';
+
 class DataList {
   late String identifier;
   late List header;
   late List<List> body;
   late List<List> memBody = [];
-  List<List> change = [];
+  List<Change> change = [];
   late int indexPos;
 
   DataList(String identifier, List header, List<List> body, int indexPos) {
@@ -45,39 +47,32 @@ class DataList {
 
   load() async => memBody = csvToList(await loadFromFile(identifier));
 
-  Future<List<List>> update() async {
+  Future<List<Change>> update() async {
     await load();
-    change = checkChange();
+    if(memBody.length!=0) change = checkChange();
     await printToLog(change);
     await save();
     return change;
   }
 
-  printToLog(List<List> change) async {
+  printToLog(List<Change> change) async {
     String strChange = "";
     change.forEach((element) {
-      strChange += "[" +
-          DateTime.now().toString() +
-          "] " +
-          element[0][0] +
-          "(" +
-          element[2] +
-          ":" +
-          element[1] +
-          ") \r\n";
+      strChange += element.printToLog();
     });
-    if (!(strChange.compareTo("") == 0)) await printDataChangeLog(strChange);
+    if (!(strChange.compareTo("") == 0)) printDataChangeLog(strChange);
   }
 
   checkChange() {
-    List<List> change = [];
+    List<Change> change = [];
     for (int n = 0; n < body.length; n++) {
       for (int y = 0; y < header.length; y++) {
         try {
           if (body[n][y] != memBody[n][y])
-            change.add([body[n], body[n][y], header[y]]);
+            change.add(new Change(
+              Change.ProcessableMarks, [header[y], body[n][y]], body[n][0]));
         } catch (e) {
-          change.add([body[n], body[n][y], header[y]]);
+          print(e);
         }
       }
     }

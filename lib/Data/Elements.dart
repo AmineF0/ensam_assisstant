@@ -2,8 +2,6 @@ import 'ProcessableMarks.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 
-
-
 class Elements extends ProcessableMarks {
   Elements(String identifier, List header, List<List> body, int indexPos)
       : super(identifier, header, body, indexPos);
@@ -122,6 +120,14 @@ class Elements extends ProcessableMarks {
         ),
       ],
     ));
+
+    rows.add(data.pInfo.attendance.getElementAttendance(body[i][nameToIndex["CodeElem"]!]));
+
     return rows;
   }
+
+  getListCourses(){
+    
+  }
+
 }
