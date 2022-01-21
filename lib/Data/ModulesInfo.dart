@@ -81,12 +81,20 @@ class ModList {
 
   loadmods() async {
     String modText = await rootBundle.loadString('Assets/modsList.json');
-    modules=json.decode(modText)[0];
+    modules = json.decode(modText)[0];
   }
 
   findElem(String code) {
     String mod = code.substring(0, code.lastIndexOf("_"));
     if (modules.containsKey(mod)) return modules[mod]["elem"][code];
+    return {"Intitule": mod};
+  }
+
+  findParentMod(String code) {
+    String mod = code.substring(0, code.lastIndexOf("_"));
+    if (modules.containsKey(mod))
+      return modules[mod];
+    else if (modules.containsKey(code)) return modules[code];
     return {"Intitule": mod};
   }
 

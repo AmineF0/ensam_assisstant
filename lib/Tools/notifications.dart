@@ -10,24 +10,28 @@ import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'logging.dart';
+
 Future<void> showNotification(List<String> text) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-          'your channel id', 'your channel name', 'your channel description',
+          'schoolapp bell', 'schoolapp bell', 'schoolapp bell notifies you the change in schoolapp',
           importance: Importance.max,
           priority: Priority.high,
           ticker: 'ticker');
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
+   await printActivityLog(
+      "[" + DateTime.now().toString() + "] " + " : push singl notifying");
   await flutterLocalNotificationsPlugin
       .show(0, text[0], text[1], platformChannelSpecifics, payload: 'item x');
 }
 
 Future<void> showGroupedNotifications(List<List<String>> notifs) async {
-  const String groupKey = 'com.android.example.WORK_EMAIL';
-  const String groupChannelId = 'grouped channel id';
-  const String groupChannelName = 'grouped channel name';
-  const String groupChannelDescription = 'grouped channel description';
+  const String groupKey = 'com.android.ensam_assitant.ensam_assisstant';
+  const String groupChannelId = 'schoolapp bells';
+  const String groupChannelName = 'schoolapp bells';
+  const String groupChannelDescription = 'schoolapp bell notifies you the changes in schoolapp';
 
   List<String> lines = <String>[];
 
@@ -42,8 +46,11 @@ Future<void> showGroupedNotifications(List<List<String>> notifs) async {
     const NotificationDetails NotificationPlatformSpecifics =
         NotificationDetails(android: NotificationAndroidSpecifics);
 
+    await printActivityLog(
+      "[" + DateTime.now().toString() + "] " + " : push mult notifying");
+
     await flutterLocalNotificationsPlugin.show(
-        i + 1, notifs[i][0], notifs[i][1], NotificationPlatformSpecifics);
+        i , notifs[i][0], notifs[i][1], NotificationPlatformSpecifics);
 
     lines.add('$notifs[i][0] $notifs[i][1]');
   }
@@ -67,7 +74,7 @@ Future<void> showGroupedNotifications(List<List<String>> notifs) async {
   NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(
-      3, 'Attention', 'message', platformChannelSpecifics);
+       notifs.length, 'Attention', 'message', platformChannelSpecifics);
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

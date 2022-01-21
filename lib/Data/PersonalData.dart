@@ -89,8 +89,9 @@ class PersonalData {
         personal[th[0].innerHtml] = td[0].innerHtml;
       }
     }
-    downloadFile(
-        "http://schoolapp.ensam-umi.ac.ma", personal['img'], "/storage/img.jpeg");
+    
+    downloadFile("http://schoolapp.ensam-umi.ac.ma", personal['img'],
+        "/storage/"+personal['img']+".jpeg");
   }
 
   loadAttendance() async {

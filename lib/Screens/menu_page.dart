@@ -14,14 +14,14 @@ class MenuScreen extends StatefulWidget {
   final int? current;
 
   MenuScreen(
-      this.mainMenu, {
-        Key? key,
-        this.callback,
-        this.current,
-      });
+    this.mainMenu, {
+    Key? key,
+    this.callback,
+    this.current,
+  });
 
   @override
-  _MenuScreenState createState() => _MenuScreenState();
+  _MenuScreenState createState() => new _MenuScreenState();
 }
 
 class _MenuScreenState extends State<MenuScreen> {
@@ -31,15 +31,16 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle androidStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white);
+    final TextStyle androidStyle = const TextStyle(
+        fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white);
     final TextStyle iosStyle = const TextStyle(color: Colors.white);
     final style = kIsWeb
         ? androidStyle
         : Platform.isAndroid
-        ? androidStyle
-        : iosStyle;
+            ? androidStyle
+            : iosStyle;
 
-    return Scaffold(
+    return new Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -58,15 +59,17 @@ class _MenuScreenState extends State<MenuScreen> {
             children: <Widget>[
               Spacer(),
               Padding(
-                padding: const EdgeInsets.only(bottom: 24.0, left: 24.0, right: 24.0),
-                child: Image.file(
-                  File(data.directory!.path+'/storage/img.jpeg'),
+                padding: const EdgeInsets.only(
+                    bottom: 24.0, left: 24.0, right: 24.0),
+                child: new Image.file(
+                  new File(data.directory!.path + '/storage/'+data.getImg()+'.jpeg'),
                   width: 90,
                   height: 90,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 36.0, left: 24.0, right: 24.0),
+                padding: const EdgeInsets.only(
+                    bottom: 36.0, left: 24.0, right: 24.0),
                 child: Text(
                   data.getName(),
                   style: TextStyle(
@@ -84,13 +87,13 @@ class _MenuScreenState extends State<MenuScreen> {
                   children: <Widget>[
                     ...widget.mainMenu
                         .map((item) => MenuItemWidget(
-                      key: Key(item.index.toString()),
-                      item: item,
-                      callback: widget.callback!,
-                      widthBox: widthBox,
-                      style: style,
-                      selected: index == item.index,
-                    ))
+                              key: Key(item.index.toString()),
+                              item: item,
+                              callback: widget.callback!,
+                              widthBox: widthBox,
+                              style: style,
+                              selected: index == item.index,
+                            ))
                         .toList()
                   ],
                 ),
@@ -103,18 +106,22 @@ class _MenuScreenState extends State<MenuScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "logout",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.white, width: 2.0),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0)),
                     textStyle: TextStyle(color: Colors.white),
                   ),
-                  onPressed : () async {
+                  onPressed: () async {
                     await data.forgetCred();
-                    Navigator.replace(context,oldRoute: ModalRoute.of(context)!,
-                        newRoute: MaterialPageRoute(builder: (BuildContext context) => new SignIn()));
+                    await data.destroy();
+                    Navigator.replace(context,
+                        oldRoute: ModalRoute.of(context)!,
+                        newRoute: MaterialPageRoute(
+                            builder: (BuildContext context) => new SignIn()));
                   },
                 ),
               ),
@@ -157,11 +164,7 @@ class MenuItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            item!.icon,
-            color: white,
-            size: 24,
-          ),
+          item!.icon,
           widthBox!,
           Expanded(
             child: Text(
@@ -177,9 +180,20 @@ class MenuItemWidget extends StatelessWidget {
 
 class MenuItem {
   final String title;
-  final IconData icon;
+  final icon;
   final int index;
   dynamic dataList;
 
-  MenuItem(this.title, this.icon, this.index, this.dataList);
+  MenuItem(this.title, IconData ic, this.index, this.dataList)
+      : this.icon = Icon(
+          ic,
+          color: Colors.white,
+          size: 24,
+        );
+  MenuItem.image(this.title, String adress, this.index, this.dataList)
+      : this.icon = ImageIcon(
+          AssetImage(adress),
+          color: Colors.white,
+          size: 24,
+        );
 }

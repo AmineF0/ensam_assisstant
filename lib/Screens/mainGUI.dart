@@ -6,16 +6,22 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import 'page_structure.dart';
 
+String briefIconAdress = 'Assets/icons8-brief-90.png',
+attendanceIconAdress = 'Assets/icons8-attendance-100.png',
+gradesIconAdress = 'Assets/icons8-grades-100.png';
+
 class HomeScreen extends StatefulWidget {
-  static List<MenuItem> mainMenu = [
-    MenuItem("Personal Info", Icons.payment, 0, data.pInfo.markCurrent),
-    MenuItem("Elements Marks", Icons.help, 1, data.pInfo.markCurrent),
-    MenuItem("Modules Marks", Icons.help, 2, data.pInfo.moduleCurrent),
-    MenuItem("Nonattendance", Icons.card_giftcard, 3, data.pInfo.attendance),
-    MenuItem("Notifications", Icons.notifications, 4, data.pInfo.markCurrent),
-    MenuItem("Settings", Icons.settings, 5, data.pInfo.markCurrent),
-    MenuItem("About Us", Icons.info_outline, 6, data.pInfo.markCurrent),
+  List<MenuItem> mainMenu = [
+    MenuItem.image("Personal Info", briefIconAdress, 0, data.pInfo.markCurrent),
+    MenuItem.image("Elements", gradesIconAdress, 1, data.pInfo.markCurrent),
+    MenuItem.image("Modules", gradesIconAdress, 2, data.pInfo.moduleCurrent),
+    MenuItem.image("Absence", attendanceIconAdress, 3, data.pInfo.attendance),
+    //MenuItem("Notifications", Icons.notifications, 4, data.pInfo.markCurrent),
+    MenuItem("Settings", Icons.settings, 4, data.pInfo.markCurrent),
+    MenuItem("About Us", Icons.info_outline, 5, data.pInfo.markCurrent),
   ];
+
+  
 
   @override
   _HomeScreenState createState() => new _HomeScreenState();
@@ -32,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: _drawerController,
       style: DrawerStyle.Style1,
       menuScreen: MenuScreen(
-        HomeScreen.mainMenu,
+        (new HomeScreen()).mainMenu,
         callback: _updatePage,
         current: _currentPage,
       ),

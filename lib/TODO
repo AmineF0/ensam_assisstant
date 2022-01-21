@@ -1,8 +1,6 @@
 beta version / mvp :
-    homescreen
     error report
-    icons
-    about us
+
 
 later updates
     language support
@@ -15,3 +13,101 @@ later updates
 test notif
 polish notif
 attendance S1 vs S2
+classement ()
+option lifetime
+
+
+
+CC EX TP Moy : elem
+Moy : mod
+
+http://schoolapp.ensam-umi.ac.ma/schoolapp/notes-stat/
+mod:    modsat?eval=MOYMOD&
+            codemod={API_11}&au={2020-2021}&note={11.0}
+elem:   elemevalsat?eval=
+            {NoteCC}&codeelem={API_35_1}&au={2021-2022}&note={16.25}
+            NoteTP
+            NoteEX
+            MoyElem
+
+elem : 
+<html lang="fr">
+<div class="stat">
+<p>Statistiques NoteTP - API_22_2 - 2020-2021</p>
+<table class="table table-sm table-bordered table-striped mb-none" >
+	<tbody>
+		<tr>
+			<th>Votre note</th>
+			<td>15.5</td>
+		</tr>
+		<tr>
+			<th>Moyenne promo</th>
+			<td>13.90</td>
+		</tr>
+		<tr>
+			<th>Max</th>
+			<td>16.0</td>
+		</tr>
+		<tr>
+			<th>Min</th>
+			<td>-0.01</td>
+		</tr>
+		<tr>
+			<th>Ecart type</th>
+			<td>3.01</td>
+		</tr>
+		<tr>
+			<th>Effectif</th>
+			<td>366</td>
+		</tr>
+		<tr>
+			<th>Votre classement</th>
+			<td>40</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</html>
+
+mod : 
+<html lang="fr">
+
+<div class="stat">
+<p>Statistiques MoyMod - API_13 - 2020-2021</p>
+<table class="table table-sm table-bordered table-striped mb-none" >
+	<tbody>
+		<tr>
+			<th>Votre note</th>
+			<td>15.64</td>
+		</tr>
+		<tr>
+			<th>Moyenne promo</th>
+			<td>13.33</td>
+		</tr>
+		<tr>
+			<th>Max</th>
+			<td>19.82</td>
+		</tr>
+		<tr>
+			<th>Min</th>
+			<td>0.0</td>
+		</tr>
+		<tr>
+			<th>Ecart type</th>
+			<td>3.25</td>
+		</tr>
+		<tr>
+			<th>Effectif</th>
+			<td>369</td>
+		</tr>
+		<tr>
+			<th>Votre classement</th>
+			<td>92</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</html>
+
+//html to map/json
+//map <=> string json

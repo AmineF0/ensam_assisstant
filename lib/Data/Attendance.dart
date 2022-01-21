@@ -14,6 +14,7 @@ class Attendance extends ProcessableMarks {
   }
 
   Map<String, absenceData> attendance = {};
+  Map<String, int> attendanceId = {};
   List<List<String>> sanctions = [[]];
   List<absenceData> rat = [];
   int sancRat = 0;
@@ -28,6 +29,7 @@ class Attendance extends ProcessableMarks {
     processedBody.forEach((element) {
       element.add(modList.findElem(element[this.indexPos])["Intitule"]);
     });
+
     if (int.parse(sanctions[0][1]) < 12)
       sancRat = 0;
     else if ((int.parse(sanctions[0][1]) < 15))
@@ -58,23 +60,75 @@ class Attendance extends ProcessableMarks {
     super.process();
   }
 
+  String hashAttendance(int i, arr) {
+    try {
+      return arr[i][nameToIndex["Date"]!] +
+          arr[i][nameToIndex["Seance"]!] +
+          arr[i][nameToIndex["Element"]!];
+    } catch (e) {
+      return "0";
+    }
+  }
+
   @override
   checkChange() {
     List<Change> change = [];
+    for (int n = 0; n < memBody.length; n++) {
+      attendanceId[hashAttendance(n, memBody)] = n;
+    }
+    Map<String, int> checkDeleted = {};
+
     for (int n = 0; n < body.length; n++) {
-      for (int y = 0; y < header.length; y++) {
+      checkDeleted[hashAttendance(n, body)] = n;
+      //new absence
+      if (!attendanceId.containsKey(hashAttendance(n, body))) {
         try {
-          if (body[n][y] != memBody[n][y]) {
-            change.add(new Change(Change.Attendance, [header, processedBody[n]],
-                body[n][nameToIndex["Intitule"]!] + " " + processedBody[n][0]));
-            break;
-          }
+          change.add(new Change(Change.Attendance, [header, processedBody[n], "New"],
+              "New absence of "+ body[n][nameToIndex["Intitule"]!] + " " + processedBody[n][0]));
+          break;
         } catch (e) {
           change.add(new Change(
-              Change.Attendance, [header, processedBody[n]], body[n][0]));
+              Change.Attendance, [header, processedBody[n], "New"],"New absence of "+  body[n][0]));
           break;
         }
+      } else {
+        //change in old
+        for (int y = 0; y < header.length; y++) {
+          try {
+            if (body[n][y] !=
+                memBody[attendanceId[hashAttendance(n, body)]!][y]) {
+              change.add(new Change(
+                  Change.Attendance,
+                  [header, processedBody[n], "Change"],
+                  "Change absence of "+ body[n][nameToIndex["Intitule"]!] +
+                      " " +
+                      processedBody[n][0]));
+              break;
+            }
+          } catch (e) {
+            change.add(new Change(Change.Attendance,
+                [header, processedBody[n], "Change"], "Change absence of "+ body[n][0]));
+            break;
+          }
+        }
       }
+    }
+
+    //check if some old one disappeared
+    for (int i = 0; i < memBody.length; i++) {
+      if (!checkDeleted.containsKey(hashAttendance(i, memBody)))           
+        try {
+              change.add(new Change(
+                  Change.Attendance,
+                  [header, memBody[i], "Removed"],
+                  "Removed absence of "+ memBody[i][0])); //TODO add intitle
+              break;
+            }
+          catch (e) {
+            change.add(new Change(Change.Attendance,
+                [header, memBody[i], "Removed"], "Removed absence of "+ memBody[i][0]));
+            break;
+          }
     }
 
     return change;
@@ -402,7 +456,7 @@ class Attendance extends ProcessableMarks {
         ),
       ],
     ));
-    List show = rat.where((elem) => elem.just != 0 || elem.just != 0).toList();
+    List show = rat.where((elem) => elem.njust != 0 || elem.just != 0).toList();
     rows.addAll(List.generate(
         show.length,
         (index) => TableRow(
@@ -565,8 +619,6 @@ class Attendance extends ProcessableMarks {
       ],
     ));
 
-
-
     rows.addAll(List.generate(
         processedBody.length,
         (index) => TableRow(
@@ -602,7 +654,8 @@ class Attendance extends ProcessableMarks {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: "${processedBody[index][1]} ${processedBody[index][2]}",
+                                  text:
+                                      "${processedBody[index][1]} ${processedBody[index][2]}",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),

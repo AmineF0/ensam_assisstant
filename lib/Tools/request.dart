@@ -54,8 +54,7 @@ Future<bool> getInfo(var dataLoad) async {
       url,
       data: formData,
       options:
-          Options(
-            followRedirects: false, validateStatus: (status) => true),
+          Options(followRedirects: false, validateStatus: (status) => true),
     );
     print(log);
     var fin = await dio.get("http://schoolapp.ensam-umi.ac.ma/schoolapp/index");
@@ -104,10 +103,20 @@ Future<Document?> postHTML(url, dataLoad) async {
 
 //TODO invistigate use
 downloadFile(host, link, location) async {
+  var f = new Directory(data.directory!.path + "/storage");
+  if (!(await f.exists())) f.create();
   Response res =
       await dio.download(host + link, data.directory!.path + location);
 }
 
 forgetConnection() async {
   var log = await dio.get(urlLogOut);
+}
+
+getMarkDetails(String request) async {
+
+  String support = "http://schoolapp.ensam-umi.ac.ma/schoolapp/notes-stat/";
+  var dataReq = await dio.get(support + request);
+  return parse(dataReq.data);
+  
 }

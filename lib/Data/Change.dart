@@ -28,24 +28,24 @@ class Change {
       case Attendance:
         String str = "";
         for (int i = 0; i < change[0].length; i++)
-          str += change[0][i] + ":" + change[1][i] + " ";
+          str += change[0][i] + ":" + change[1][i] + " \n";
         return [
           changeLabel + " : ", //title
           changeLabel +
-              " => (" +
+              " \n=> ( " +
               str + // The value
-              ")"
+              " )"
         ];
 
       case ProcessableMarks:
         return [
           changeLabel + " : " + change[0], //title
           changeLabel + // codeElem/Mod
-              "(" +
+              "\n( " +
               change[0] + // The
-              ":" +
+              " : " +
               change[1] + // The value
-              ")"
+              " )"
         ];
       default:
     }

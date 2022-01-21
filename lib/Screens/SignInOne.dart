@@ -1,3 +1,4 @@
+import 'package:ensam_assisstant/Tools/backgroundFetch.dart';
 import 'package:flutter/material.dart';
 import 'package:ensam_assisstant/Tools/browser.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
@@ -162,6 +163,7 @@ class _SignInOneState extends State<SignInOne> {
                       var rs = await checkCred(email,password,value);
                       if(rs) {
                         await data.load();
+                        initBgFetch();
                         Navigator.replace(context,oldRoute: ModalRoute.of(context)!,
                             newRoute: MaterialPageRoute(builder: (BuildContext context) => new Home()));
                       }

@@ -1,7 +1,6 @@
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
 
 import '../../main.dart';
 
@@ -11,49 +10,30 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUsState extends State<AboutUs> {
-  bool lockInBackground = data.session.get(UserData.backgroundFetch)!;
-  bool notificationsEnabled = data.session.get(UserData.notification)!;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: buildSettingsList(),
     );
   }
 
   Widget buildSettingsList() {
-    return SettingsList(
-      sections: [
-        SettingsSection(
-          title: 'Common',
-          tiles: [
-            SettingsTile(
-              title: 'Language',
-              subtitle: 'English',
-              leading: Icon(Icons.language),
-              /*onPressed: (context) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  //builder: (_) => LanguagesScreen(),
-                ));
-              },*/
-            ),
-            SettingsTile(
-              title: 'Environment',
-              subtitle: 'Production',
-              leading: Icon(Icons.cloud_queue),
-            ),
-          ],
-        ),
-        SettingsSection(
-          title: 'Account',
-          tiles: [
-            SettingsTile(title: 'Phone number', leading: Icon(Icons.phone)),
-            SettingsTile(title: 'Email', leading: Icon(Icons.email)),
-            SettingsTile(title: 'Sign out', leading: Icon(Icons.exit_to_app)),
-          ],
-        ),
-      ],
+    return Align( 
+      alignment: Alignment.center,
+      child: Padding(
+        padding: new EdgeInsets.all(35.0),
+        child: Text(
+          "This app was made by AmineF0 and by the support of Gadz'IT club to ease the use of SchoolApp and solve the notification problem.\n\n"
+          +"This is still a beta and uncomplete version so if you have any recommandation or spotted an error you can notify us in Play Store Comments.\n\n"
+          +"\n"
+          +"Gadz'IT 2022",
+          textAlign: TextAlign.center,
+          textScaleFactor: 2.0,
+          style: TextStyle(color: Colors.black45, fontSize: 8.0),
+        )
+      )
     );
   }
-
 }

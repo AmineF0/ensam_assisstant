@@ -45,10 +45,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return new SplashScreen(
       navigateAfterFuture: loadFromFuture(),
-      title: new Text('Welcome In SplashScreen'),
+      title: new Text('Welcome In Schoolapp bell'),
       backgroundColor: Colors.white,
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 100.0,
+      image: Image.asset("Assets/app_icon_beta.png"),
       loaderColor: Color(0xff0065a3),
     );
   }
@@ -62,12 +63,11 @@ class SignIn extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (_) => MenuProvider(),
-        child: HomeScreen(),
+        child: new HomeScreen(),
       ),
       //debugShowCheckedModeBanner: false,
     );

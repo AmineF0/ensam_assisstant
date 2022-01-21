@@ -1,6 +1,8 @@
 import 'package:ensam_assisstant/Data/Change.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
+import 'package:ensam_assisstant/Tools/userData.dart';
 
+import '../main.dart';
 import 'DataList.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,7 @@ abstract class ProcessableMarks extends DataList {
             change.add(new Change(
                 Change.ProcessableMarks,
                 [header[y], body[n][y]],
-                body[n][nameToIndex["Intitule"]!] + processedBody[n][0]));
+                body[n][nameToIndex["Intitule"]!] + " " + processedBody[n][0]));
         } catch (e) {
           change.add(new Change(
               Change.ProcessableMarks, [header[y], body[n][y]], body[n][0]));
@@ -79,15 +81,21 @@ abstract class ProcessableMarks extends DataList {
 
   @override
   List<Widget> toGUI() {
+    List<int> currentSemester = [];
+    for (int i = 0; i < processedBody.length; i++) {
+      if (data.pInfo.modList
+              .findParentMod(processedBody[i][indexPos])["trueSem"] ==
+          data.session.get(UserData.Semester)) currentSemester.add(i);
+    }
     return List.generate(
-        processedBody.length,
+        currentSemester.length,
         (index) => Container(
             padding: EdgeInsets.all(10),
             child: Table(
               border: TableBorder.symmetric(
                   outside: BorderSide(width: 2, color: Colors.blue)),
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: getTableRows(index),
+              children: getTableRows(currentSemester[index]),
             )));
   }
 
@@ -108,5 +116,21 @@ abstract class ProcessableMarks extends DataList {
         ],
       ),
     );
+  }
+
+  getInfoInTable(name, i) {
+    return "${processedBody[i][nameToIndex[name]!]}";
+  }
+
+  Map<String, String> processMarkDetailRequest(table) {
+    Map<String, String> details = {};
+    if (table == null) return details;
+    var bodyt = table.querySelector('tbody');
+    for (var t in bodyt.getElementsByTagName('tr')) {
+      var head = t.getElementsByTagName('td');
+      var info = t.getElementsByTagName('th');
+      details[head[0].innerHtml] = info[0].innerHtml;
+    }
+    return details;
   }
 }

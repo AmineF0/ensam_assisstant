@@ -19,7 +19,6 @@ saveToFile(String text, String identifier) async {
   await file.writeAsString(text);
 }
 
-
 String listToCSV(header, body) {
   String str = header.join('|');
   for (var e in body) {
@@ -40,7 +39,10 @@ csvToList(text) {
   return memBody;
 }
 
-deleteFilesinStorage() async{
+deleteFilesinStorage() async {
   final dir = Directory(data.directory!.path + '/storage/');
-  dir.deleteSync(recursive: true);
+  dir.list().forEach((element) {
+    print(element.toString());
+  });
+  await dir.delete(recursive: true);
 }

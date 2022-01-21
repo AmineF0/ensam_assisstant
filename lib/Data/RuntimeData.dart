@@ -14,7 +14,6 @@ import 'Change.dart';
 class RuntimeData {
   Directory? directory;
   late UserData session = new UserData();
-  var db;
   var log;
   late PersonalData pInfo;
   NotificationsHistory notifsHistory = new NotificationsHistory();
@@ -22,20 +21,20 @@ class RuntimeData {
 
   RuntimeData();
 
+  destroy() {
+    change = [];
+    //add more destruction
+  }
+
   loadDirectory() async => directory = await getApplicationDocumentsDirectory();
 
   Future<void> load() async {
-    print(change.length.toString());
     pInfo = await PersonalData.create();
     notifsHistory.init();
 
-    pInfo.markCurrent.body[3][3] = "n:" + getRandomString(10);
-    pInfo.moduleCurrent.body[3][3] = "n:" + getRandomString(10);
-    pInfo.attendance.body[3][3] = "n:" + getRandomString(10);
-
-    pInfo.markCurrent.process();
-    pInfo.moduleCurrent.process();
-    pInfo.attendance.process();
+    await pInfo.markCurrent.process();
+    await pInfo.moduleCurrent.process();
+    await pInfo.attendance.process();
 
     change.addAll(await pInfo.markCurrent.update());
     change.addAll(await pInfo.moduleCurrent.update());
@@ -62,8 +61,6 @@ class RuntimeData {
   }
 
   Future<void> forgetCred() async {
-    session.set("email", "");
-    session.set("pass", "");
     deleteFilesinStorage();
     forgetConnection();
   }
@@ -76,10 +73,6 @@ class RuntimeData {
   loadMinimal() async {
     pInfo = await PersonalData.createMinimal();
     notifsHistory.init();
-
-    pInfo.markCurrent.body[3][3] = getRandomString(10);
-    pInfo.moduleCurrent.body[3][3] = getRandomString(10);
-    pInfo.attendance.body[3][3] = getRandomString(10);
 
     pInfo.markCurrent.process();
     pInfo.moduleCurrent.process();
@@ -96,6 +89,10 @@ class RuntimeData {
     return pInfo.personal["Nom "].toString() +
         " " +
         pInfo.personal["Prénom "].toString();
+  }
+
+  getImg() {
+    return pInfo.personal['img'].toString();
   }
 
   getLog() async {

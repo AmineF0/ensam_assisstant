@@ -9,6 +9,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
 
 import 'Pages/AboutUs.dart';
+import 'Pages/HomeScreenGUI.dart';
 import 'Pages/NotifHistP.dart';
 import 'mainGUI.dart';
 import 'table_data_cleaner.dart';
@@ -39,23 +40,19 @@ class PageStructure extends StatelessWidget {
         context.select<MenuProvider, int>((provider) => provider.currentPage);
     var tmpCnt;
 
-    if (_currentPage == 0)//TODO HOME SCREEN
-      tmpCnt = Container(
-        color: Colors.grey[300],
-        child: RichText(
-            text: TextSpan(
-                text: "Changes :\r\n" + data.log,
-                style: DefaultTextStyle.of(context).style)),
-      );
-    else if (_currentPage == 4) tmpCnt = NotifHistP();
-    else if (_currentPage == 5) tmpCnt = SettingsScreen();
-    else if (_currentPage == 6) tmpCnt = AboutUs();
+    if (_currentPage == 0)
+      tmpCnt = HomeScreenGUI();
+    //else if (_currentPage == 4) tmpCnt = NotifHistP();
+    else if (_currentPage == 4)
+      tmpCnt = SettingsScreen();
+    else if (_currentPage == 5)
+      tmpCnt = AboutUs();
     else
       tmpCnt = Container(
         color: Colors.grey[300],
         child: new TableWidgetCleaner(
             key: Key(_currentPage.toString()),
-            dl: HomeScreen.mainMenu[_currentPage].dataList),
+            dl: (new HomeScreen()).mainMenu[_currentPage].dataList),
       );
 
     final container = tmpCnt;
@@ -68,7 +65,7 @@ class PageStructure extends StatelessWidget {
         automaticallyImplyLeading: false,
         material: (_, __) => MaterialAppBarData(elevation: elevation),
         title: PlatformText(
-          HomeScreen.mainMenu[_currentPage].title,
+          (new HomeScreen()).mainMenu[_currentPage].title,
         ),
         leading: Transform.rotate(
           angle: angle,

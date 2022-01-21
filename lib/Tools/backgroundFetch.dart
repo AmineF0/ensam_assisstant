@@ -19,7 +19,7 @@ const simplePeriodic1HourTask = "simplePeriodic1HourTask";
 
 initBgFetch() {
   printActivityLog("[" + DateTime.now().toString() + "] " + " : init work man");
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
 
   Workmanager().registerPeriodicTask("2", simplePeriodicTask,
       constraints: Constraints(networkType: NetworkType.connected),
@@ -64,15 +64,16 @@ pushNotification() async {
 
   await initNotif();
 
-  await printActivityLog(
-      "[ : bb");
-
   List<List<String>> notifs = data.getNotification();
-  await printActivityLog(
-      "[ : bb");
-  if (notifs.length == 0)return;
-  else if (notifs.length == 1) await showNotification(notifs[0]);
-  else await showGroupedNotifications(notifs);
+  await printActivityLog("[ : bb" + notifs.length.toString());
+  if (notifs.length == 0) return;
+  else if (notifs.length == 1)
+    await showNotification(notifs[0]);
+  else
+    await showGroupedNotifications(notifs);
+
+  didReceiveLocalNotificationSubject.close();
+  selectNotificationSubject.close();
 }
 
 void callbackDispatcher() {

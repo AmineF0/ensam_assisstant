@@ -8,7 +8,9 @@ class UserData {
   static const String fileName = "user_data";
   static const String notification = "notif",
       backgroundFetch = "bgFetch",
-      notificationExpiration = "notifExpir";
+      notificationExpiration = "notifExpir",
+      Semester = "Semester",
+      count = "count";
   Map<String, dynamic> userData = new Map();
 
   UserData();
@@ -27,9 +29,10 @@ class UserData {
     }
   }
 
-  void set(String s, t) {
+  set(String s, t) {
     userData[s] = t;
     saveToFile(jsonEncode([userData]), fileName);
+    return t;
   }
 
   get(String s) {
@@ -49,6 +52,12 @@ class UserData {
       case notificationExpiration:
         set(s, 1);
         return 1;
+      case Semester:
+        set(s, "S1");
+        return "S1";
+      case count:
+        set(s, 0);
+        return 0;
       default:
         return "";
     }

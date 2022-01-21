@@ -17,6 +17,8 @@ class NotificationsHistory {
   NotificationsHistory();
 
   init() async {
+    notifications = [];
+
     String jsonString = await loadFromFile(fileName);
     if (jsonString == "") {
       await saveToFile(jsonEncode([]), fileName);
@@ -71,8 +73,7 @@ class NotificationsHistory {
     DateTime now = DateTime.now();
     DateTime then = DateTime.parse(map[Change.DateString]);
     Duration life =
-        //Duration(days: data.session.get(UserData.notificationExpiration));
-        Duration(minutes: 5);
+        Duration(days: data.session.get(UserData.notificationExpiration));
 
     DateTime death = then.add(life);
     return now.isAfter(death);
@@ -90,7 +91,7 @@ class NotificationsHistory {
       return Container(
           child: RichText(
         text: TextSpan(
-          text: "empty : ",
+          text: "empty : No new notifications",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
         ),
       ));
@@ -197,7 +198,7 @@ class NotificationsHistory {
       ],
     ));
 
-        rows.add(TableRow(
+    rows.add(TableRow(
       children: <Widget>[
         Table(
           columnWidths: {
@@ -243,7 +244,8 @@ class NotificationsHistory {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: "${notifications![i][Change.ChangeLabelString]}",
+                          text:
+                              "${notifications![i][Change.ChangeLabelString]}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         )
@@ -276,5 +278,139 @@ class NotificationsHistory {
         ],
       ),
     );
+  }
+
+  toHomeScreen() {
+    List<TableRow> rows = [];
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                  color: Colors.blue,
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Changes : ",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          columnWidths: {
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(2),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(5),
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "Element ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(5),
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "Change Details",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+
+    rows.addAll(List.generate(
+        notifications!.length,
+        (i) => TableRow(
+              children: <Widget>[
+                Table(
+                  columnWidths: {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  children: <TableRow>[
+                    TableRow(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      "${notifications![notifications!.length-i-1][Change.ChangeLabelString]}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      "${notifications![notifications!.length-i-1][Change.ChangeString]}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            )));
+    
+    return Container(
+        padding: EdgeInsets.all(10),
+        child: Table(
+          border: TableBorder.symmetric(
+              outside: BorderSide(width: 2, color: Colors.blue),
+              inside: BorderSide(width: 1)),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: rows));
   }
 }

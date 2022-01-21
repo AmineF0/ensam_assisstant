@@ -1,4 +1,5 @@
 import 'package:ensam_assisstant/Tools/backgroundFetch.dart';
+import 'package:ensam_assisstant/Tools/browser.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:flutter/widgets.dart';
@@ -17,6 +18,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool lockInBackground = data.session.get(UserData.backgroundFetch)!;
   bool notificationsEnabled = data.session.get(UserData.notification)!;
 
+  Color colorDisabled = Colors.grey, colorEnabled = Colors.blue;
+
+  List semesters = ["S1", "S2"];
+  String currentSemester = data.session.get(UserData.Semester)!;
+  List<DropdownMenuItem<String>> itemss = [
+    DropdownMenuItem<String>(
+      value: "S1",
+      child: Text("S1"),
+    ),
+    DropdownMenuItem<String>(
+      value: "S2",
+      child: Text("S2"),
+    )
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget buildSettingsList() {
     return SettingsList(
       sections: [
-        SettingsSection(
+        /*SettingsSection(
           title: 'Common',
           tiles: [
             SettingsTile(
@@ -46,22 +62,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: Icon(Icons.cloud_queue),
             ),
           ],
-        ),
+        ),*/
         SettingsSection(
-          title: 'Account',
-          tiles: [
-            SettingsTile(title: 'Phone number', leading: Icon(Icons.phone)),
-            SettingsTile(title: 'Email', leading: Icon(Icons.email)),
-            SettingsTile(title: 'Sign out', leading: Icon(Icons.exit_to_app)),
-          ],
-        ),
-        SettingsSection(
-          title: 'Security',
+          title: Text('Accessibility', style: TextStyle(fontSize: 19.0)),
           tiles: [
             SettingsTile.switchTile(
-              title: 'Lock app in background',
+              title: Text('Lock app in background'),
               leading: Icon(Icons.phonelink_lock),
-              switchValue: lockInBackground,
+              initialValue: lockInBackground,
               onToggle: (bool value) {
                 setState(() {
                   printActivityLog("[" +
@@ -88,7 +96,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             SettingsTile.switchTile(
-              title: 'Enable Notifications',
+              title: Text('Enable Notifications'),
+              leading: Icon(Icons.notifications_active),
+              initialValue: notificationsEnabled,
+              activeSwitchColor:
+                  ((lockInBackground) ? colorEnabled : colorDisabled),
+              onToggle: (value) {
+                setState(() {
+                  printActivityLog("[" +
+                      DateTime.now().toString() +
+                      "] " +
+                      " : notif value change" +
+                      value.toString());
+                  if (lockInBackground)
+                    setPreference(UserData.notification, value);
+                  if (lockInBackground) notificationsEnabled = value;
+                });
+              },
+            ),
+            /*SettingsTile.switchTile(
+              title: 'Notification Lifetime',
               enabled: lockInBackground,
               leading: Icon(Icons.notifications_active),
               switchValue: notificationsEnabled,
@@ -103,9 +130,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   notificationsEnabled = value;
                 });
               },
+            ),*/
+          ],
+        ),
+        SettingsSection(
+          title: Text('Data', style: TextStyle(fontSize: 19.0)),
+          tiles: [
+            CustomSettingsTile(
+                child: Padding(
+                padding: EdgeInsets.all(10),
+                  child: ListTile(
+        title: Text('Semester', style: TextStyle(fontSize: 19.0)),
+        trailing: DropdownButton<String>(
+                    // Initial Value
+                    value: currentSemester,
+
+                    // Down Arrow Icon
+                    icon: Padding (
+                      padding: EdgeInsets.only(left:5),
+                      child: const Icon(Icons.keyboard_arrow_down)
+                    ),
+
+
+                    // Array list of items
+                    items: this.itemss,
+                    // After selecting the desired option,it will
+                    // change button value to selected value
+                    onChanged: (newValue) {
+                      setState(() {
+                        currentSemester = newValue!.toString();
+                        setPreference(UserData.Semester, currentSemester);  
+                      });
+                    },
+                  ),
+                )
+            ))
+          ],
+        ),
+        SettingsSection(
+          title: Text('Account', style: TextStyle(fontSize: 19.0)),
+          tiles: [
+            SettingsTile(
+                title: Text('Email : ' + data.session.get("email")),
+                leading: Icon(Icons.email)),
+            SettingsTile(
+              title: Text('Change Password'),
+              leading: Icon(Icons.vpn_key),
+              onPressed: (c) {
+                forgotMDP();
+              },
             ),
           ],
         ),
+
+        /*
         SettingsSection(
           title: 'Misc',
           tiles: [
@@ -115,12 +193,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: 'Open source licenses',
                 leading: Icon(Icons.collections_bookmark)),
           ],
-        ),
-        CustomSection(
+        ),*/
+        CustomSettingsSection(
           child: Column(
             children: [
               Text(
-                'Version: 0.0.1 (287)',
+                'Version: 0.0.1 beta',
                 style: TextStyle(color: Color(0xFF777777)),
               ),
             ],
