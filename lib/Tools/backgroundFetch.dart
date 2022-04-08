@@ -5,36 +5,26 @@ import 'package:ensam_assisstant/Data/RuntimeData.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_android/path_provider_android.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import 'notifications.dart';
 import 'package:workmanager/workmanager.dart';
 
-const simpleTaskKey = "simpleTask";
-const rescheduledTaskKey = "rescheduledTask";
-const failedTaskKey = "failedTask";
-const simpleDelayedTask = "simpleDelayedTask";
-const simplePeriodicTask = "simplePeriodicTask";
-const simplePeriodic1HourTask = "simplePeriodic1HourTask";
-
-initBgFetch() {
-  printActivityLog("[" + DateTime.now().toString() + "] " + " : init work man");
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
-
-  Workmanager().registerPeriodicTask("2", simplePeriodicTask,
-      constraints: Constraints(networkType: NetworkType.connected),
-      initialDelay: Duration(seconds: 10),
-      frequency: Duration(minutes: 15));
+hookNorif(v) async {
+  await initNotif();
+  await printActivityLog("[ : jolopo");
+  //await showNotification(["ba9 baaa9", v], 0);
+  await showGroupedNotifications(v);
+  didReceiveLocalNotificationSubject.close();
+  selectNotificationSubject.close();
 }
 
 bgFetch() async {
   try {
-    //try main data
     data = new RuntimeData();
     await data.loadDirectory();
     var rs = await data.loadSession();
-    await printActivityLog(
-        "[" + DateTime.now().toString() + "] " + " : fetch bg");
 
     if (!data.session.get(UserData.backgroundFetch)) {
       await printActivityLog(
@@ -44,15 +34,23 @@ bgFetch() async {
     }
 
     if (rs) {
+      // await data.loadChangeHook();
+      // if (data.changeHook.getDecision()) {
+      //   await hookNorif([
+      //     ["ba9 baaaa9", "From all the unborn chicken voices in my head."],
+      //     ["ba9", "why won't u stop the nose, I am trying to get some rest."]
+      //   ]);
+      // }
+
       await printActivityLog("[" +
           DateTime.now().toString() +
           "] " +
           " : valid work man and fetch");
       await data.loadMinimal();
-
       if (data.session.get(UserData.notification)) await pushNotification();
     }
   } catch (e) {
+    print(e.toString());
     await printActivityLog(
         "[" + DateTime.now().toString() + "] " + " : err " + e.toString());
   }
@@ -66,21 +64,37 @@ pushNotification() async {
 
   List<List<String>> notifs = data.getNotification();
   await printActivityLog("[ : bb" + notifs.length.toString());
-  if (notifs.length == 0) return;
-  else if (notifs.length == 1)
-    await showNotification(notifs[0]);
-  else
-    await showGroupedNotifications(notifs);
+
+  for (int i = 0; i < notifs.length; i++) {
+    await showNotification(notifs[i], i);
+  }
 
   didReceiveLocalNotificationSubject.close();
   selectNotificationSubject.close();
 }
 
-void callbackDispatcher() {
+const simpleTaskKey = "simpleTask";
+const rescheduledTaskKey = "rescheduledTask";
+const failedTaskKey = "failedTask";
+const simpleDelayedTask = "simpleDelayedTask";
+const simplePeriodicTask = "simplePeriodicTaskk";
+const simplePeriodic1HourTask = "simplePeriodic1HourTask";
+
+initBgFetch() async {
+  printActivityLog("[" + DateTime.now().toString() + "] " + " : init work man");
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+
+  await Workmanager().registerPeriodicTask("1", simplePeriodicTask,
+      constraints: Constraints(networkType: NetworkType.connected),
+      initialDelay: Duration(seconds: 1),
+      frequency: Duration(minutes: 15),
+      backoffPolicy: BackoffPolicy.linear);
+}
+
+void callbackDispatcher() async {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case simpleTaskKey:
-        print("$simpleTaskKey was executed. inputData = $inputData");
         await bgFetch();
         break;
       case rescheduledTaskKey:

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'Classement.dart';
 import 'ProcessableMarks.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
@@ -11,16 +14,23 @@ class Module extends ProcessableMarks {
   }
 
   @override
-  process() {
-    processedBody = body;
-    processedHeader = header;
+  process() async {
+    processedBody = json.decode(json.encode(body));
+    processedHeader = json.decode(json.encode(header));
     var modList = data.pInfo.modList;
     keyColumns.add(processedHeader.length);
     processedHeader.add("Intitule");
     processedBody.forEach((element) {
       element.add(modList.findMod(element[this.indexPos])["Intitule"]);
     });
+
     super.process();
+
+    for (int i = 0; i < processedBody.length; i++) {
+      String elem = processedBody[i][indexPos], year = getInfoInTable("AU", i);
+      await data.classment.get(Classment.modReqData[0][1], elem, year,
+          body[i][nameToIndex["Moy"]!], true, Classment.modReqData[0][0]);
+    }
   }
 
   @override
@@ -43,7 +53,7 @@ class Module extends ProcessableMarks {
               ],
             ));
         */
-        List<TableRow> rows = [];
+    List<TableRow> rows = [];
     rows.add(TableRow(
       children: <Widget>[
         Table(
@@ -55,7 +65,7 @@ class Module extends ProcessableMarks {
                   color: Colors.blue,
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "${body[i][nameToIndex["Intitule"]!]} : ",
+                    "${processedBody[i][nameToIndex["Intitule"]] ?? body[i][indexPos]} : ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
@@ -102,4 +112,20 @@ class Module extends ProcessableMarks {
     ));
     return rows;
   }
+
+  @override
+  getDataLines(i) {
+    return [
+      [getPair("CodeMod", i), getPair("AU", i)],
+      [getPair("Moy", i), getPair("Dec", i)],
+    ];
+  }
+
+  @override
+  getName(i) {
+    return processedBody[i][nameToIndex["Intitule"]] ?? body[i][indexPos];
+  }
+
+  @override
+  getIsMod() => true;
 }

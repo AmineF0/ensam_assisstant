@@ -8,8 +8,6 @@ import 'Data/RuntimeData.dart';
 import 'Screens/SignInOne.dart';
 import 'Screens/mainGUI.dart';
 import 'Tools/backgroundFetch.dart';
-import 'Tools/notifications.dart';
-import 'Tools/getAllMods.dart';
 
 //TODO: setting page
 //TODO: fix notif
@@ -17,8 +15,28 @@ import 'Tools/getAllMods.dart';
 
 RuntimeData data = new RuntimeData();
 
+const kBackgroundColor = Color(0xFFF8F8F8);
+const kActiveIconColor = Color(0xFFE68342);
+const kTextColor = Color(0xFF222B45);
+const kBlueLightColor = Color(0xFFC7B8F5);
+const kBlueColor = Color(0xFF817DC0);
+const kShadowColor = Color.fromARGB(255, 149, 152, 165);
+Color cPrimary = Color(0xff6699cc);
+Color cgPrimary = Color(0xFFC7B8F5); //0xffffe66d);
+Color cWhite = Colors.white;
+Color cBlack = Colors.black;
+Color cLightText = Color(0xff031927);
+
 void main() {
   runApp(new MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+        scaffoldBackgroundColor: kBackgroundColor,
+        primaryColor: cPrimary,
+        fontFamily: 'Nunito',
+        textTheme: const TextTheme(
+          headline2: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        )),
     home: new MyApp(),
   ));
 }
@@ -50,7 +68,7 @@ class _MyAppState extends State<MyApp> {
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 100.0,
       image: Image.asset("Assets/app_icon_beta.png"),
-      loaderColor: Color(0xff0065a3),
+      loaderColor: cPrimary,
     );
   }
 }

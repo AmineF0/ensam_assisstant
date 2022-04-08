@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,8 @@ import 'Change.dart';
 class DataList {
   late String identifier;
   late List header;
-  late List<List> body;
-  late List<List> memBody = [];
+  late List body;
+  late List memBody = [];
   List<Change> change = [];
   late int indexPos;
 
@@ -98,5 +97,5 @@ class DataList {
     return body;
   }
 
-  toGUI() {}
+  toGUI([String sem="S0"]) {}
 }

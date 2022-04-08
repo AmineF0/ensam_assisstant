@@ -1,5 +1,5 @@
 import 'package:ensam_assisstant/Tools/logging.dart';
-
+import 'package:ensam_assisstant/Tools/userData.dart';
 import 'Change.dart';
 import 'ProcessableMarks.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +13,10 @@ class Attendance extends ProcessableMarks {
     keyColumns.add(indexPos);
   }
 
-  Map<String, absenceData> attendance = {};
+  Map<String, AbsenceData> attendance = {};
   Map<String, int> attendanceId = {};
-  List<List<String>> sanctions = [[]];
-  List<absenceData> rat = [];
+  List<List<String>> sanctions = [];
+  List<AbsenceData> rat = [];
   int sancRat = 0;
 
   @override
@@ -83,12 +83,19 @@ class Attendance extends ProcessableMarks {
       //new absence
       if (!attendanceId.containsKey(hashAttendance(n, body))) {
         try {
-          change.add(new Change(Change.Attendance, [header, processedBody[n], "New"],
-              "New absence of "+ body[n][nameToIndex["Intitule"]!] + " " + processedBody[n][0]));
+          change.add(new Change(
+              Change.Attendance,
+              [header, processedBody[n], "New"],
+              "New absence of " +
+                  body[n][nameToIndex["Intitule"]!] +
+                  " " +
+                  processedBody[n][0]));
           break;
         } catch (e) {
           change.add(new Change(
-              Change.Attendance, [header, processedBody[n], "New"],"New absence of "+  body[n][0]));
+              Change.Attendance,
+              [header, processedBody[n], "New"],
+              "New absence of " + body[n][0]));
           break;
         }
       } else {
@@ -100,14 +107,17 @@ class Attendance extends ProcessableMarks {
               change.add(new Change(
                   Change.Attendance,
                   [header, processedBody[n], "Change"],
-                  "Change absence of "+ body[n][nameToIndex["Intitule"]!] +
+                  "Change absence of " +
+                      body[n][nameToIndex["Intitule"]!] +
                       " " +
                       processedBody[n][0]));
               break;
             }
           } catch (e) {
-            change.add(new Change(Change.Attendance,
-                [header, processedBody[n], "Change"], "Change absence of "+ body[n][0]));
+            change.add(new Change(
+                Change.Attendance,
+                [header, processedBody[n], "Change"],
+                "Change absence of " + body[n][0]));
             break;
           }
         }
@@ -116,19 +126,20 @@ class Attendance extends ProcessableMarks {
 
     //check if some old one disappeared
     for (int i = 0; i < memBody.length; i++) {
-      if (!checkDeleted.containsKey(hashAttendance(i, memBody)))           
+      if (!checkDeleted.containsKey(hashAttendance(i, memBody)))
         try {
-              change.add(new Change(
-                  Change.Attendance,
-                  [header, memBody[i], "Removed"],
-                  "Removed absence of "+ memBody[i][0])); //TODO add intitle
-              break;
-            }
-          catch (e) {
-            change.add(new Change(Change.Attendance,
-                [header, memBody[i], "Removed"], "Removed absence of "+ memBody[i][0]));
-            break;
-          }
+          change.add(new Change(
+              Change.Attendance,
+              [header, memBody[i], "Removed"],
+              "Removed absence of " + memBody[i][0])); //TODO add intitle
+          break;
+        } catch (e) {
+          change.add(new Change(
+              Change.Attendance,
+              [header, memBody[i], "Removed"],
+              "Removed absence of " + memBody[i][0]));
+          break;
+        }
     }
 
     return change;
@@ -141,7 +152,8 @@ class Attendance extends ProcessableMarks {
     for (var t in body) {
       sanctions.add([]);
       for (var tmp in t.getElementsByTagName('td')) {
-        if (tmp.children.length != 0)
+        if (tmp.children.length != 0 &&
+            tmp.getElementsByTagName('button').length != 0)
           tmp = tmp.getElementsByTagName('button')[0];
         sanctions[j].add(tmp.innerHtml.toString());
       }
@@ -154,7 +166,7 @@ class Attendance extends ProcessableMarks {
 
     var body = tab.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
     for (var t in body) {
-      absenceData d = new absenceData();
+      AbsenceData d = new AbsenceData();
       String code = t.getElementsByTagName('td')[0].innerHtml.toString();
       d.code = code;
       d.njust = int.parse(t.getElementsByTagName('td')[2].innerHtml.toString());
@@ -164,29 +176,48 @@ class Attendance extends ProcessableMarks {
     }
   }
 
-  getElementAttendance(String code) {
-    return TableRow(
-      children: <Widget>[
-        Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            TableRow(
-              children: <Widget>[
-                Container(
-                    padding: EdgeInsets.all(5),
-                    child: getRichTextAttendance("Absence Non Justifie",
-                        attendance[code]!.njust, attendance[code]!.isRatt)),
-                Container(
-                    padding: EdgeInsets.all(5),
-                    child: getRichTextAttendanceJust(
-                        "Absence Justifie", attendance[code]!.just)),
-              ],
-            )
-          ],
-        ),
-      ],
-    );
+  AbsenceData? getElementAttendance(String code) {
+    return attendance[code];
   }
+
+  List<List<String>> getSanctionsData() => sanctions;
+
+  List<AbsenceData?> getAbsenceDataList({sem = "S0"}) {
+    List<AbsenceData?> dataList = [];
+    List<AbsenceData> show =
+        rat.where((elem) => elem.njust != 0 || elem.just != 0).toList();
+    show.forEach((element) {
+      if (data.pInfo.modList.findParentMod(element.code)["trueSem"] ==
+          ((sem == "S0") ? data.session.get(UserData.Semester) : sem))
+        dataList.add(element);
+    });
+
+    return dataList;
+  }
+
+  // getElementAttendance(String code) {
+  //   return TableRow(
+  //     children: <Widget>[
+  //       Table(
+  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+  //         children: <TableRow>[
+  //           TableRow(
+  //             children: <Widget>[
+  //               Container(
+  //                   padding: EdgeInsets.all(5),
+  //                   child: getRichTextAttendance("Absence Non Justifie",
+  //                       attendance[code]!.njust, attendance[code]!.isRatt)),
+  //               Container(
+  //                   padding: EdgeInsets.all(5),
+  //                   child: getRichTextAttendanceJust(
+  //                       "Absence Justifie", attendance[code]!.just)),
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   @override
   getTableRows(int i) {
@@ -689,44 +720,58 @@ class Attendance extends ProcessableMarks {
   }
 
   @override
-  List<Widget> toGUI() {
-    List<Widget> widg = [];
-
-    widg.add(Container(
-        padding: EdgeInsets.all(10),
-        child: Table(
-          border: TableBorder.symmetric(
-              outside: BorderSide(width: 2, color: Colors.blue),
-              inside: BorderSide(width: 1)),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: getSanctions(),
-        )));
-
-    widg.add(Container(
-        padding: EdgeInsets.all(10),
-        child: Table(
-          border: TableBorder.symmetric(
-              outside: BorderSide(width: 2, color: Colors.blue),
-              inside: BorderSide(width: 1)),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: getElements(),
-        )));
-
-    widg.add(Container(
-        padding: EdgeInsets.all(10),
-        child: Table(
-          border: TableBorder.symmetric(
-              outside: BorderSide(width: 2, color: Colors.blue),
-              inside: BorderSide(width: 1)),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: getDetails(),
-        )));
-
-    return widg;
+  getDataLines(i) {
+    // TODO: implement getDataLines
+    throw UnimplementedError();
   }
+
+  @override
+  getName(i) {
+    // TODO: implement getName
+    throw UnimplementedError();
+  }
+
+  // @override
+  // List<Widget> toGUI() {
+  //   List<Widget> widg = [];
+
+  //   widg.add(Container(
+  //       padding: EdgeInsets.all(10),
+  //       child: Table(
+  //         border: TableBorder.symmetric(
+  //             outside: BorderSide(width: 2, color: Colors.blue),
+  //             inside: BorderSide(width: 1)),
+  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+  //         children: getSanctions(),
+  //       )));
+
+  //   widg.add(Container(
+  //       padding: EdgeInsets.all(10),
+  //       child: Table(
+  //         border: TableBorder.symmetric(
+  //             outside: BorderSide(width: 2, color: Colors.blue),
+  //             inside: BorderSide(width: 1)),
+  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+  //         children: getElements(),
+  //       )));
+
+  //   widg.add(Container(
+  //       padding: EdgeInsets.all(10),
+  //       child: Table(
+  //         border: TableBorder.symmetric(
+  //             outside: BorderSide(width: 2, color: Colors.blue),
+  //             inside: BorderSide(width: 1)),
+  //         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+  //         children: getDetails(),
+  //       )));
+
+  //   return widg;
+  // }
+  @override
+  getIsMod() => false;
 }
 
-class absenceData {
+class AbsenceData {
   int index = 0, just = 0, njust = 0, isRatt = 0;
   Color color = Colors.black;
   String code = "", intitule = "";

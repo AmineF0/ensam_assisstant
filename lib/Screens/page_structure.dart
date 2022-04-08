@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math' show pi;
 
+import 'package:ensam_assisstant/Screens/Components/AttendanceUI/AttendanceMenu.dart';
+import 'package:ensam_assisstant/Screens/Components/Marks/MarkData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
 
+import 'Components/InfoListUI.dart';
+import 'Components/Marks/MarkInfoList.dart';
 import 'Pages/AboutUs.dart';
 import 'Pages/HomeScreenGUI.dart';
 import 'Pages/NotifHistP.dart';
@@ -39,48 +43,49 @@ class PageStructure extends StatelessWidget {
     final _currentPage =
         context.select<MenuProvider, int>((provider) => provider.currentPage);
     var tmpCnt;
+    
 
-    if (_currentPage == 0)
-      tmpCnt = HomeScreenGUI();
-    //else if (_currentPage == 4) tmpCnt = NotifHistP();
-    else if (_currentPage == 4)
-      tmpCnt = SettingsScreen();
-    else if (_currentPage == 5)
-      tmpCnt = AboutUs();
-    else
-      tmpCnt = Container(
-        color: Colors.grey[300],
-        child: new TableWidgetCleaner(
-            key: Key(_currentPage.toString()),
-            dl: (new HomeScreen()).mainMenu[_currentPage].dataList),
-      );
+    switch (_currentPage) {
+      case 0: tmpCnt = HomeScreenGUI(); break;
+      case 1: tmpCnt = TableWidgetCleaner(data: data.pInfo.markCurrent); break;
+      case 2: tmpCnt = TableWidgetCleaner(data: data.pInfo.moduleCurrent); break;
+      case 3: tmpCnt = AttendaceMenu(); break;
+      case 4: tmpCnt = SettingsScreen(); break;
+      case 5: tmpCnt = AboutUs(); break;
+      case 6: tmpCnt = Text(data.log); break;
+      default:tmpCnt = Container(
+          color: Colors.grey[300],
+          child: new TableWidgetCleaner(data: data.pInfo.markCurrent),
+          );
+    }
 
     final container = tmpCnt;
-    final color = Theme.of(context).accentColor;
+    final color = Theme.of(context).primaryColor;
     final style = TextStyle(color: color);
 
     return PlatformScaffold(
-      backgroundColor: Colors.transparent,
-      appBar: PlatformAppBar(
-        automaticallyImplyLeading: false,
-        material: (_, __) => MaterialAppBarData(elevation: elevation),
-        title: PlatformText(
-          (new HomeScreen()).mainMenu[_currentPage].title,
-        ),
-        leading: Transform.rotate(
-          angle: angle,
-          child: PlatformIconButton(
-            icon: Icon(
-              Icons.menu,
-            ),
-            onPressed: () {
-              ZoomDrawer.of(context)!.toggle();
-            },
+        backgroundColor: Colors.transparent,
+        appBar: PlatformAppBar(
+          backgroundColor: color,
+          automaticallyImplyLeading: false,
+          material: (_, __) => MaterialAppBarData(elevation: elevation),
+          title: PlatformText(
+            (new HomeScreen()).mainMenu[_currentPage].title,
           ),
+          leading: Transform.rotate(
+            angle: angle,
+            child: PlatformIconButton(
+              icon: Icon(
+                Icons.menu,
+              ),
+              onPressed: () {
+                ZoomDrawer.of(context)!.toggle();
+              },
+            ),
+          ),
+          trailingActions: actions,
         ),
-        trailingActions: actions,
-      ),
-      /*bottomNavBar: PlatformNavBar(
+        /*bottomNavBar: PlatformNavBar(
         material: (_, __) => MaterialNavBarData(
           selectedLabelStyle: style,
         ),
@@ -98,13 +103,7 @@ class PageStructure extends StatelessWidget {
         )
             .toList(),
       ),*/
-      body: kIsWeb
-          ? container
-          : Platform.isAndroid
-              ? container
-              : SafeArea(
-                  child: container,
-                ),
-    );
+
+        body: container);
   }
 }

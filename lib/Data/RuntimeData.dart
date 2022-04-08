@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:ensam_assisstant/Data/Classement.dart';
 import 'package:ensam_assisstant/Data/PersonalData.dart';
 import 'package:ensam_assisstant/Data/notificationsHistory.dart';
+import 'package:ensam_assisstant/Tools/changeHook.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
@@ -18,18 +20,31 @@ class RuntimeData {
   late PersonalData pInfo;
   NotificationsHistory notifsHistory = new NotificationsHistory();
   List<Change> change = [];
+  Classment classment = new Classment();
+  ChangeHook changeHook = new ChangeHook();
 
   RuntimeData();
 
-  destroy() {
-    change = [];
-    //add more destruction
+
+
+  loadDirectory() async {
+    try {
+      directory = await getApplicationDocumentsDirectory();
+    } catch (e) {
+      print("custom dir : " + e.toString());
+      directory = Directory(
+          "/data/user/0/com.ensam_assisstant.SchoolApp_Bell/app_flutter");
+    }
+    return directory;
   }
 
-  loadDirectory() async => directory = await getApplicationDocumentsDirectory();
+  loadChangeHook() async {
+    await changeHook.getChangeHook(
+        savedTime: session.get(UserData.lastUpdateTime).toString());
+    session.set(UserData.lastUpdateTime, changeHook.getServerUpdate());
+  }
 
-  Future<void> load() async {
-    pInfo = await PersonalData.create();
+  loadCommon() async {
     notifsHistory.init();
 
     await pInfo.markCurrent.process();
@@ -40,9 +55,14 @@ class RuntimeData {
     change.addAll(await pInfo.moduleCurrent.update());
     change.addAll(await pInfo.attendance.update());
 
+    await notifsHistory.sync(change, false);
+  }
+
+  Future<void> load() async {
+    pInfo = await PersonalData.create();
+    await classment.init();
+    await loadCommon();
     await getLog();
-    await notifsHistory.sync(change);
-    getNotification();
   }
 
   Future<bool> loadSession() async {
@@ -72,17 +92,7 @@ class RuntimeData {
 
   loadMinimal() async {
     pInfo = await PersonalData.createMinimal();
-    notifsHistory.init();
-
-    pInfo.markCurrent.process();
-    pInfo.moduleCurrent.process();
-    pInfo.attendance.process();
-
-    change.addAll(await pInfo.markCurrent.update());
-    change.addAll(await pInfo.moduleCurrent.update());
-    change.addAll(await pInfo.attendance.update());
-
-    await notifsHistory.sync(change);
+    await loadCommon();
   }
 
   getName() {
@@ -101,6 +111,11 @@ class RuntimeData {
     //log = await loadFromFile(changeLogFile);
   }
 
+  destroy() {
+    change = [];
+    //add more destruction
+  }
+
   //tmp function
   List<List<String>> getNotification() {
     List<List<String>> notifs = [];
@@ -114,8 +129,11 @@ class RuntimeData {
   }
 
   var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  var _num = '1234567890';
   Random _rnd = Random();
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  String getRandomNum(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _num.codeUnitAt(_rnd.nextInt(_num.length))));
 }

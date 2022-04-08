@@ -1,4 +1,6 @@
-import 'package:ensam_assisstant/Tools/request.dart';
+import 'dart:convert';
+
+import 'package:ensam_assisstant/Data/Classement.dart';
 
 import 'ProcessableMarks.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +16,8 @@ class Elements extends ProcessableMarks {
 
   @override
   process() async {
-    processedBody = body;
-    processedHeader = header;
+    processedBody = json.decode(json.encode(body));
+    processedHeader = json.decode(json.encode(header));
 
     var modList = data.pInfo.modList;
     keyColumns.add(processedHeader.length);
@@ -31,37 +33,19 @@ class Elements extends ProcessableMarks {
       processedBody[i].add(calculateProjection(i).toStringAsFixed(2));
     }
 
-/* TODO : classment
-    processedHeader
-        .addAll(["NoteCCstat", "NoteEXstat", "NoteTPstat", "MoyElemStat"]);
-    List<List<String>> reqData = [
-      ["CC", "NoteCC"],
-      ["EX", "NoteEX"],
-      ["TP", "NoteTP"],
-      ["Moy", "MoyElem"]
-    ];
     for (int i = 0; i < processedBody.length; i++) {
       String elem = processedBody[i][indexPos], year = getInfoInTable("AU", i);
-        for (int n = 0; n < 4;n++){
-          String req = generateMarkDetailRequest(
-              reqData[n][1], elem, year, getInfoInTable(reqData[n][0], i));
-        if (req == "")
-          processedBody[i].add("");
-        else {
-          processedBody[i].add(
-              processMarkDetailRequest(await getMarkDetails(req)).toString());
-        }
-      };
-    } */
+      for (int n = 0; n < 4; n++)
+        await data.classment.get(
+            Classment.elemReqData[n][1],
+            elem,
+            year,
+            body[i][nameToIndex[Classment.elemReqData[n][0]]!],
+            false,
+            Classment.elemReqData[n][0]);
+    }
 
     super.process();
-  }
-
-  String generateMarkDetailRequest(
-      String type, String elem, String year, String mark) {
-    double i = double.tryParse(mark) ?? -1;
-    if (i == -1) return "";
-    return "elemevalsat?eval=$type&codeelem=$elem&au=$year&note=$mark";
   }
 
   @override
@@ -75,11 +59,14 @@ class Elements extends ProcessableMarks {
             TableRow(
               children: <Widget>[
                 Container(
-                  color: Colors.blue,
+                  color: cPrimary,
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "${processedBody[i][nameToIndex["Intitule"]!]} : ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    "${processedBody[i][nameToIndex["Intitule"]] ?? body[i][indexPos]} : ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: cLightText),
                   ),
                 ),
               ],
@@ -162,9 +149,6 @@ class Elements extends ProcessableMarks {
       ],
     ));
 
-    rows.add(data.pInfo.attendance
-        .getElementAttendance(body[i][nameToIndex["CodeElem"]!]));
-
     rows.add(TableRow(
       children: <Widget>[
         Table(
@@ -206,4 +190,24 @@ class Elements extends ProcessableMarks {
   }
 
   getListCourses() {}
+
+  @override
+  getDataLines(i) { //TODO potentially attendance
+    return [
+      [getPair("CodeElem", i), getPair("AU", i)],
+      [getPair("CC", i), getPair("EX", i)],
+      [getPair("TP", i), getPair("MoySO", i)],
+      [getPair("RAT", i), getPair("MoySR", i)],
+      [getPair("Moy", i), getPair("Dec", i)],
+      [getPair("Projection", i)]
+    ];
+  }
+
+  @override
+  getName(i) {
+    return processedBody[i][nameToIndex["Intitule"]] ?? body[i][indexPos];
+  }
+
+  @override
+  getIsMod() => false;
 }

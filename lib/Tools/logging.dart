@@ -12,8 +12,6 @@ printActivityLog(String action) async =>
     await addToLogFile(action, activityLog);
 
 addToLogFile(String text, String id) async {
-  return;
-  print(id);
   String old = await loadFromFile(id);
   String newL = text + "\r\n" + old;
   print(text);

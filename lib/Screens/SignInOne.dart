@@ -1,8 +1,9 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:ars_progress_dialog/ars_progress_dialog.dart';
 import 'package:ensam_assisstant/Tools/backgroundFetch.dart';
 import 'package:flutter/material.dart';
 import 'package:ensam_assisstant/Tools/browser.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
-import 'package:ars_progress_dialog/dialog.dart';
 
 import '../main.dart';
 
@@ -13,7 +14,7 @@ class SignInOne extends StatefulWidget {
 }
 
 class _SignInOneState extends State<SignInOne> {
-  bool value = false, errorVis=false;
+  bool value =  true, errorVis=false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -43,43 +44,50 @@ class _SignInOneState extends State<SignInOne> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.only(top: 250),
+          margin: EdgeInsets.only(top: 300),
+          
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 10.0,
+              spreadRadius: 10.0,
+            ),
+          ],
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
             child: ListView(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top:0),
+                  padding: EdgeInsets.only(top:10, bottom: 15),
                   child: Center(
                     child: Text('SIGN IN',
                       style: TextStyle(
-                          fontFamily: 'SFUIDisplay',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
                   child: Container(
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
                       controller: emailController,
                       style: TextStyle(
                         color: Colors.black,
-                        fontFamily: 'SFUIDisplay'
                       ),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email Address',
                         prefixIcon: Icon(Icons.person_outline),
                         labelStyle: TextStyle(
-                          fontSize: 15
+                          fontSize: 16
                         )
                       ),
                     ),
@@ -92,14 +100,13 @@ class _SignInOneState extends State<SignInOne> {
                     controller: passwordController,
                     style: TextStyle(
                       color: Colors.black,
-                      fontFamily: 'SFUIDisplay'
                     ),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       prefixIcon: Icon(Icons.lock_outline),
                       labelStyle: TextStyle(
-                          fontSize: 15
+                          fontSize: 16
                         )
                     ),
                   ),
@@ -113,7 +120,7 @@ class _SignInOneState extends State<SignInOne> {
                             children: <Widget>[
                               Checkbox(
                                 value: this.value,
-                                activeColor: Color(0xff0065a3),
+                                activeColor: Theme.of(context).primaryColor,
                                 checkColor: Color(0xffffffff),
                                 onChanged: (bool? value) {
                                   setState(() {
@@ -122,11 +129,10 @@ class _SignInOneState extends State<SignInOne> {
                                 },
                               ),
                               Text(
-                                'Stay signed',
+                                'Stay signed in',
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontFamily: 'SFUIDisplay',
-                                    fontSize: 15
+                                    fontSize: 17
                                 ),
                               ),
                             ],
@@ -140,7 +146,6 @@ class _SignInOneState extends State<SignInOne> {
                   child: Center(
                     child: Text('Something went wrong, check the credentials or try later.',
                       style: TextStyle(
-                          fontFamily: 'SFUIDisplay',
                           fontSize: 13,
                           fontWeight: FontWeight.bold
 
@@ -172,12 +177,11 @@ class _SignInOneState extends State<SignInOne> {
                     },
                     child: Text('SUBMIT',
                     style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'SFUIDisplay',
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                     ),
-                    color: Color(0xff0065a3),
+                    color: Theme.of(context).primaryColor,
                     elevation: 0,
                     minWidth: 400,
                     height: 50,
@@ -188,14 +192,14 @@ class _SignInOneState extends State<SignInOne> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(top: 5),
                   child: Center(
                   child: TextButton(
                     onPressed: (){forgotMDP();},
                       child: Text('Forgot your password?',
                       style: TextStyle(
-                        fontFamily: 'SFUIDisplay',
                         fontSize: 15,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold
                       ),
                       ),
@@ -213,7 +217,6 @@ class _SignInOneState extends State<SignInOne> {
                             TextSpan(
                               text: "Don't have an account?",
                               style: TextStyle(
-                                fontFamily: 'SFUIDisplay',
                                 color: Colors.black,
                                 fontSize: 15,
                               )
@@ -221,9 +224,9 @@ class _SignInOneState extends State<SignInOne> {
                             TextSpan(
                               text: " Sign up",
                               style: TextStyle(
-                                fontFamily: 'SFUIDisplay',
-                                color: Color(0xff0065a3),
+                                color: Theme.of(context).primaryColor,
                                 fontSize: 15,
+                                fontWeight: FontWeight.bold
                               )
                             )
                           ]

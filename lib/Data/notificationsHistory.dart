@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:ensam_assisstant/Data/DataList.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../main.dart';
 import 'Change.dart';
 
+//TODO receive all notification
 class NotificationsHistory {
   String fileName = "notifications";
-  List? notifications = [];
+  List notifications = [];
 
   NotificationsHistory();
 
@@ -33,27 +32,27 @@ class NotificationsHistory {
     refresh();
   }
 
-  add(Map notif) async {
+  add(Map notif, bool seen) async {
     try {
-      notifications!.add(notif);
+      notifications.add({"seen": seen, "data": notif});
     } catch (e) {
-      notifications = [notif];
+      notifications = [
+        {"seen": seen, "data": notif}
+      ];
     }
     await saveToFile(jsonEncode(notifications), fileName);
   }
 
-  addAll(List<Map> notifs) async {
-    try {
-      notifications!.addAll(notifs);
-    } catch (e) {
-      notifications = notifs;
-    }
+  addAll(List<Map> notifs, bool seen) async {
+    notifs.forEach((element) {
+      add(element, seen);
+    });
     await saveToFile(jsonEncode(notifications), fileName);
   }
 
   refresh() async {
     try {
-      notifications!.removeWhere((element) => getLifeTime(element));
+      notifications.removeWhere((element) => getLifeTime(element["data"]));
     } catch (e) {
       notifications = [];
     }
@@ -62,7 +61,7 @@ class NotificationsHistory {
 
   remove(int i) async {
     try {
-      notifications!.removeAt(i);
+      notifications.removeAt(i);
     } catch (e) {
       print(e);
     }
@@ -74,20 +73,170 @@ class NotificationsHistory {
     DateTime then = DateTime.parse(map[Change.DateString]);
     Duration life =
         Duration(days: data.session.get(UserData.notificationExpiration));
-
+    //TODO add option
     DateTime death = then.add(life);
     return now.isAfter(death);
   }
 
-  sync(List<Change> change) async {
+  sync(List<Change> change, bool seen) async {
     await addAll(
-        List.generate(change.length, (index) => change[index].toMap()));
+        List.generate(change.length, (index) => change[index].toMap()), seen);
   }
 
+  toHomeScreen() {
+    List<TableRow> rows = [];
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                  color: Colors.blue,
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Changes : ",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+
+    rows.add(TableRow(
+      children: <Widget>[
+        Table(
+          columnWidths: {
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(2),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: <TableRow>[
+            TableRow(
+              children: <Widget>[
+                Container(
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(5),
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "Element ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  color: Colors.lightBlue,
+                  padding: EdgeInsets.all(5),
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: "Change Details",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    ));
+
+    rows.addAll(List.generate(
+        notifications.length,
+        (i) => TableRow(
+              children: <Widget>[
+                Table(
+                  columnWidths: {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  children: <TableRow>[
+                    TableRow(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      "${notifications[notifications.length - i - 1]["data"][Change.ChangeLabelString]}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          child: RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      "${(notifications[notifications.length - i - 1]["seen"] ? '' : 'NEW ')}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
+                                ),
+                                TextSpan(
+                                  text:
+                                      "${notifications[notifications.length - i - 1]["data"][Change.ChangeString]}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            )
+          )
+        );
+
+      
+    for (int i = 0; i < notifications.length; i++)
+      notifications[i]["seen"] = true;
+    refresh();
+
+
+    return Container(
+        padding: EdgeInsets.all(10),
+        child: Table(
+            border: TableBorder.symmetric(
+                outside: BorderSide(width: 2, color: Colors.blue),
+                inside: BorderSide(width: 1)),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: rows));
+  }
+
+/*
   toScrollableTable() {}
 
   Widget toGUI() {
-    if (notifications!.length == 0)
+    if (notifications.length == 0)
       return Container(
           child: RichText(
         text: TextSpan(
@@ -98,7 +247,7 @@ class NotificationsHistory {
     return Container(
         child: ListView(
             children: List.generate(
-                notifications!.length,
+                notifications.length,
                 (index) => Container(
                     padding: EdgeInsets.all(10),
                     child: Table(
@@ -123,7 +272,7 @@ class NotificationsHistory {
                   color: Colors.blue,
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "${notifications![i][Change.DateString]} ",
+                    "${notifications[i][Change.DateString]} ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
@@ -216,7 +365,7 @@ class NotificationsHistory {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: "${notifications![i][Change.DateString]}",
+                          text: "${notifications[i][Change.DateString]}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         )
@@ -230,7 +379,7 @@ class NotificationsHistory {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: "${notifications![i][Change.TypeString]}",
+                          text: "${notifications[i][Change.TypeString]}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         )
@@ -245,7 +394,7 @@ class NotificationsHistory {
                       children: <TextSpan>[
                         TextSpan(
                           text:
-                              "${notifications![i][Change.ChangeLabelString]}",
+                              "${notifications[i][Change.ChangeLabelString]}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         )
@@ -272,145 +421,12 @@ class NotificationsHistory {
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
           ),
           TextSpan(
-            text: "${notifications![i][name]}",
+            text: "${notifications[i][name]}",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           )
         ],
       ),
     );
   }
-
-  toHomeScreen() {
-    List<TableRow> rows = [];
-    rows.add(TableRow(
-      children: <Widget>[
-        Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            TableRow(
-              children: <Widget>[
-                Container(
-                  color: Colors.blue,
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    "Changes : ",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ],
-    ));
-
-    rows.add(TableRow(
-      children: <Widget>[
-        Table(
-          columnWidths: {
-            0: FlexColumnWidth(1),
-            1: FlexColumnWidth(2),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: <TableRow>[
-            TableRow(
-              children: <Widget>[
-                Container(
-                  color: Colors.lightBlue,
-                  padding: EdgeInsets.all(5),
-                  child: RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: "Element ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.lightBlue,
-                  padding: EdgeInsets.all(5),
-                  child: RichText(
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: "Change Details",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.black),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ],
-    ));
-
-    rows.addAll(List.generate(
-        notifications!.length,
-        (i) => TableRow(
-              children: <Widget>[
-                Table(
-                  columnWidths: {
-                    0: FlexColumnWidth(1),
-                    1: FlexColumnWidth(2),
-                  },
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  children: <TableRow>[
-                    TableRow(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          child: RichText(
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text:
-                                      "${notifications![notifications!.length-i-1][Change.ChangeLabelString]}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          child: RichText(
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text:
-                                      "${notifications![notifications!.length-i-1][Change.ChangeString]}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ],
-            )));
-    
-    return Container(
-        padding: EdgeInsets.all(10),
-        child: Table(
-          border: TableBorder.symmetric(
-              outside: BorderSide(width: 2, color: Colors.blue),
-              inside: BorderSide(width: 1)),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: rows));
-  }
+*/
 }

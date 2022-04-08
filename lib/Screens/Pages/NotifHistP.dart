@@ -15,7 +15,7 @@ class _AboutUsState extends State<NotifHistP> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: data.notifsHistory.toGUI(),
+      child: Text("data.notifsHistory.toGUI()"),
     );
   }
 

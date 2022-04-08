@@ -1,4 +1,4 @@
-package com.ensam_assisstant.ensam_assisstant
+package com.ensam_assisstant.SchoolApp_Bell
 
 import io.flutter.embedding.android.FlutterActivity
 

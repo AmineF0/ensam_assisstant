@@ -34,8 +34,9 @@ class Item {
 
   reloadData() async{}
 
-  toGUI() {
-    return data.toGUI();
+  toGUI([String sem="S0"]) {
+    if(sem=="S0") return data.toGUI();
+    return data.toGUI(sem);
   }
 
 }

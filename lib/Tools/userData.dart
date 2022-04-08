@@ -10,7 +10,8 @@ class UserData {
       backgroundFetch = "bgFetch",
       notificationExpiration = "notifExpir",
       Semester = "Semester",
-      count = "count";
+      count = "count",
+      lastUpdateTime = "time";
   Map<String, dynamic> userData = new Map();
 
   UserData();
@@ -29,15 +30,15 @@ class UserData {
     }
   }
 
-  set(String s, t) {
+  //TODO await to uses
+  set(String s, t) async {
     userData[s] = t;
-    saveToFile(jsonEncode([userData]), fileName);
+    await saveToFile(jsonEncode([userData]), fileName);
     return t;
   }
 
   get(String s) {
     var ans = userData[s] ?? defaulting(s);
-
     return ans;
   }
 
@@ -58,6 +59,9 @@ class UserData {
       case count:
         set(s, 0);
         return 0;
+      case lastUpdateTime:
+        set(s,"1");
+        return "1";
       default:
         return "";
     }

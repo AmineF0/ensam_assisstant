@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 
 class Change {
   static const String Attendance = "attendance",
@@ -86,6 +85,4 @@ class Change {
       ChangeString: change
     };
   }
-
-
 }

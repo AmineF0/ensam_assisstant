@@ -30,7 +30,7 @@ Future<bool> getInfo(var dataLoad) async {
   String url = "http://schoolapp.ensam-umi.ac.ma/schoolapp/login";
 
   dio.interceptors.add(CookieManager(cookieJar));
-  dio.options.connectTimeout = 10000;
+  dio.options.connectTimeout = 20000;
   print(dio.options.receiveTimeout);
   // second request with the cookie
 
@@ -68,6 +68,10 @@ Future<bool> getInfo(var dataLoad) async {
 Future<Document> getHtml(url) async {
   var link = await dio.get(url);
   return parse(link.data);
+}
+
+Future<Map> getJSON(url) async{
+  return (await dio.get(url)).data;
 }
 
 Future<Document?> postHTML(url, dataLoad) async {
@@ -114,9 +118,8 @@ forgetConnection() async {
 }
 
 getMarkDetails(String request) async {
-
   String support = "http://schoolapp.ensam-umi.ac.ma/schoolapp/notes-stat/";
   var dataReq = await dio.get(support + request);
-  return parse(dataReq.data);
-  
+  if (dataReq.statusCode == 200) return parse(dataReq.data);
+  return null;
 }

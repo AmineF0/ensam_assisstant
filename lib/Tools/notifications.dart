@@ -12,33 +12,35 @@ import 'package:timezone/timezone.dart' as tz;
 
 import 'logging.dart';
 
-Future<void> showNotification(List<String> text) async {
+Future<void> showNotification(List<String> text, int i) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-          'schoolapp bell', 'schoolapp bell', 'schoolapp bell notifies you the change in schoolapp',
+      AndroidNotificationDetails('schoolapp bell', 'schoolapp bell',
+          channelDescription: 'schoolapp bell notifies you the change in schoolapp',
           importance: Importance.max,
           priority: Priority.high,
           ticker: 'ticker');
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
-   await printActivityLog(
+  await printActivityLog(
       "[" + DateTime.now().toString() + "] " + " : push singl notifying");
-  await flutterLocalNotificationsPlugin
-      .show(0, text[0], text[1], platformChannelSpecifics, payload: 'item x');
+  await flutterLocalNotificationsPlugin.show(
+      i, text[0], text[1], platformChannelSpecifics,
+      payload: 'item x');
 }
 
 Future<void> showGroupedNotifications(List<List<String>> notifs) async {
   const String groupKey = 'com.android.ensam_assitant.ensam_assisstant';
   const String groupChannelId = 'schoolapp bells';
   const String groupChannelName = 'schoolapp bells';
-  const String groupChannelDescription = 'schoolapp bell notifies you the changes in schoolapp';
+  const String groupChannelDescription =
+      'schoolapp bell notifies you the changes in schoolapp';
 
   List<String> lines = <String>[];
 
   for (int i = 0; i < notifs.length; i++) {
     const AndroidNotificationDetails NotificationAndroidSpecifics =
         AndroidNotificationDetails(
-            groupChannelId, groupChannelName, groupChannelDescription,
+            groupChannelId, groupChannelName, channelDescription: groupChannelDescription,
             importance: Importance.max,
             priority: Priority.high,
             groupKey: groupKey);
@@ -47,12 +49,12 @@ Future<void> showGroupedNotifications(List<List<String>> notifs) async {
         NotificationDetails(android: NotificationAndroidSpecifics);
 
     await printActivityLog(
-      "[" + DateTime.now().toString() + "] " + " : push mult notifying");
+        "[" + DateTime.now().toString() + "] " + " : push mult notifying");
 
     await flutterLocalNotificationsPlugin.show(
-        i , notifs[i][0], notifs[i][1], NotificationPlatformSpecifics);
+        i, notifs[i][0], notifs[i][1], NotificationPlatformSpecifics);
 
-    lines.add('$notifs[i][0] $notifs[i][1]');
+    lines.add("${notifs[i][0]} ${notifs[i][1]}");
   }
 
   // Create the summary notification to support older devices that pre-date
@@ -61,20 +63,18 @@ Future<void> showGroupedNotifications(List<List<String>> notifs) async {
   /// Recommended to create this regardless as the behaviour may vary as
   /// mentioned in https://developer.android.com/training/notify-user/group
 
-  InboxStyleInformation inboxStyleInformation = InboxStyleInformation(
-      lines,
-      contentTitle: 'messages',
-      summaryText: 'update');
+  InboxStyleInformation inboxStyleInformation = InboxStyleInformation(lines,
+      contentTitle: 'messages', summaryText: 'update');
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-          groupChannelId, groupChannelName, groupChannelDescription,
+          groupChannelId, groupChannelName, channelDescription: groupChannelDescription,
           styleInformation: inboxStyleInformation,
           groupKey: groupKey,
           setAsGroupSummary: true);
   NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(
-       notifs.length, 'Attention', 'message', platformChannelSpecifics);
+      notifs.length, 'Attention', 'message', platformChannelSpecifics);
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -87,9 +87,6 @@ final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
 
 final BehaviorSubject<String?> selectNotificationSubject =
     BehaviorSubject<String?>();
-
-const MethodChannel platform =
-    MethodChannel('dexterx.dev/flutter_local_notifications_example');
 
 String? selectedNotificationPayload;
 
