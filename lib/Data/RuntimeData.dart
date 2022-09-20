@@ -3,7 +3,9 @@ import 'dart:math';
 
 import 'package:ensam_assisstant/Data/Classement.dart';
 import 'package:ensam_assisstant/Data/PersonalData.dart';
+import 'package:ensam_assisstant/Data/Semester.dart';
 import 'package:ensam_assisstant/Data/notificationsHistory.dart';
+import 'package:ensam_assisstant/Screens/Pages/Calendar.dart';
 import 'package:ensam_assisstant/Tools/changeHook.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
@@ -11,16 +13,21 @@ import 'package:ensam_assisstant/Tools/request.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../plugins/calendar_plugin/src/event_controller.dart';
+import 'CalendarData.dart';
 import 'Change.dart';
+import 'SemesterClassement.dart';
 
 class RuntimeData {
   Directory? directory;
   late UserData session = new UserData();
+  late CalendarData calendarData = new CalendarData();
   var log;
   late PersonalData pInfo;
   NotificationsHistory notifsHistory = new NotificationsHistory();
   List<Change> change = [];
   Classment classment = new Classment();
+  SemesterClassment semesterClassment = new SemesterClassment();
   ChangeHook changeHook = new ChangeHook();
 
   RuntimeData();
@@ -50,6 +57,7 @@ class RuntimeData {
     await pInfo.markCurrent.process();
     await pInfo.moduleCurrent.process();
     await pInfo.attendance.process();
+    await pInfo.semester.process();
 
     change.addAll(await pInfo.markCurrent.update());
     change.addAll(await pInfo.moduleCurrent.update());
@@ -62,6 +70,7 @@ class RuntimeData {
     pInfo = await PersonalData.create();
     await classment.init();
     await loadCommon();
+    await calendarData.loadCalendar();
     await getLog();
   }
 

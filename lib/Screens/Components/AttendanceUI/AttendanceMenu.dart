@@ -38,7 +38,7 @@ class _AttendaceMenu extends State<AttendaceMenu> {
     var size = MediaQuery.of(context).size;
     _child = new ElementAttendanceList(title: "Absence $sem", dataList: data.pInfo.attendance.getAbsenceDataList(sem: this.sem));
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 216, 207, 170),
+      backgroundColor: Colors.white,
       body: Scaffold(
         body: Stack(
         children: <Widget>[
@@ -71,20 +71,17 @@ class _AttendaceMenu extends State<AttendaceMenu> {
         ])),
       bottomNavigationBar: FluidNavBar(
         icons: [
-          FluidNavBarIcon(
-              text: "S1",
-              selectedForegroundColor: Colors.black,
-              backgroundColor: Color.fromARGB(255, 216, 207, 170)),
-          FluidNavBarIcon(
-              text: "S2",
-              selectedForegroundColor: Colors.black,
-              backgroundColor: Color(0xff6699cc))
+          FluidNavBarIcon( text: "S1" ),
+          FluidNavBarIcon( text: "S2" ),
         ],
         onChange: _handleNavigationChange,
         style: FluidNavBarStyle(
+            iconSelectedBackgroundColor: Color(0xff6699cc),
+            iconUnselectedBackgroundColor: Color(0xff224263),
             barBackgroundColor: Color(0xff6699cc),
-            iconSelectedForegroundColor: Color(0xff6699cc),
-            iconUnselectedForegroundColor: Color.fromARGB(153, 163, 0, 0)),
+            iconSelectedForegroundColor: Color(0xff000000),
+            iconUnselectedForegroundColor: Color.fromARGB(153, 255, 255, 255)
+        ),
         defaultIndex: 0,
       ),
     );

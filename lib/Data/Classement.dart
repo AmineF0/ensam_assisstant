@@ -197,7 +197,7 @@ class Classment {
       effec.add(int.parse(p["Votre classement"] ?? "0"));
     }
 
-    //for (int i = 0; i < effec.length - 1; i++) effec[i] -= effec[i + 1];
+    for (int i = 0; i < effec.length - 1; i++) effec[i] -= effec[i + 1];
 
     setAbsolute(
         encodeClassment(type, elem, year), [head.sublist(1), effec.sublist(1)]);

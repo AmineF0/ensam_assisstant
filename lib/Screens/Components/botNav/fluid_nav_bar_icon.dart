@@ -26,7 +26,9 @@ class FluidNavBarIcon {
   final Color? unselectedForegroundColor;
 
   /// The background color of the item
-  final Color? backgroundColor;
+  final Color? selectedBackgroundColor;
+
+  final Color? unselectedBackgroundColor;
 
   /// Extra information which can be used in [FluidNavBarItemBuilder]
   final Map<String, dynamic>? extras;
@@ -37,7 +39,8 @@ class FluidNavBarIcon {
       this.icon,
       this.selectedForegroundColor,
       this.unselectedForegroundColor,
-      this.backgroundColor,
+      this.selectedBackgroundColor,
+        this.unselectedBackgroundColor,
       this.extras,
       this.text});
 }

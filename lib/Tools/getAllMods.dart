@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Tools/request.dart';
-import 'fileManagement.dart';
 
 Map<String, dynamic> modules = {};
 List<List<String>> combinations = [[], [], []];

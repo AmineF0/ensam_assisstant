@@ -21,7 +21,9 @@ class DetailsScreen extends StatelessWidget {
     Key? key,
     required this.dataE,
   }) : super(key: key) {
-    classment = data.classment.getPersonalClassment(dataE.get("code"));
+    if(!dataE.getBool("isSem")) classment = data.classment.getPersonalClassment(dataE.get("code"));
+    else classment = data.semesterClassment.getPersonalClassment(dataE.get("semester"));
+    print(classment);
     //data.classment.getAbsoluteClassment(dataE.get("code"), dataE.get("year"));
   }
 
@@ -51,18 +53,17 @@ class DetailsScreen extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.all(30),
                         child: SizedBox(
-                          width: size.width *
-                              .7, // it just take 60% of total width
+                          width: size.width * .7, // it just take 60% of total width
                           child: Text(
                             dataE.get("name"),
                             style: Theme.of(context).textTheme.headline2,
                           ),
                         )),
-                    InnerTable(data: dataE),
-                    MarkAttendanceCard(
+                    /*InnerTable(data: dataE),
+                    (dataE.getBool("isSem")) ? Text("") : MarkAttendanceCard(
                         title: "Absence",
                         data: data.pInfo.attendance
-                            .getElementAttendance(dataE.get("code"))),
+                            .getElementAttendance(dataE.get("code"))) ,*/
                     ClassmentCard(
                         title: "Classment",
                         content: Text(classment.toString()),

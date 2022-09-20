@@ -58,6 +58,7 @@ class MarkInfoList extends StatelessWidget {
 
   generateTable(MarkData m, context) {
     //generate outer + inner
+    print(m);
     return GestureDetector(
         onTap: () {
           Navigator.push(

@@ -38,7 +38,8 @@ class FluidNavBarItem extends StatefulWidget {
   final Color unselectedForegroundColor;
 
   /// The background color of the item
-  final Color backgroundColor;
+  final Color selectedBackgroundColor;
+  final Color unselectedBackgroundColor;
 
   /// The temporary SVG scale used when the item pop
   final double scaleFactor;
@@ -56,7 +57,8 @@ class FluidNavBarItem extends StatefulWidget {
     this.onTap,
     this.selectedForegroundColor,
     this.unselectedForegroundColor,
-    this.backgroundColor,
+    this.selectedBackgroundColor,
+      this.unselectedBackgroundColor,
     this.scaleFactor,
     this.animationFactor,
     this.text
@@ -75,6 +77,8 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
   static const double _iconSize = 25;
 
   bool _selected;
+  Color _bgColor = Colors.white;
+  Color _fgColor = Colors.white;
 
   late AnimationController _animationController;
   late Animation<double> _activeColorClipAnimation;
@@ -141,6 +145,8 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
     super.didUpdateWidget(oldWidget);
   }
 
+
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -154,6 +160,9 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
     final scaleAnimation =
         _selected ? _activatingAnimation : _inactivatingAnimation;
 
+    _bgColor = _selected ? widget.selectedBackgroundColor : widget.unselectedBackgroundColor;
+    _fgColor = _selected ? widget.selectedForegroundColor : widget.unselectedForegroundColor;
+
     return GestureDetector(
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
@@ -164,56 +173,18 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
           margin: EdgeInsets.all(ne.width / 2 - _iconSize),
           constraints: BoxConstraints.tight(Size.square(_iconSize * 2)),
           decoration: ShapeDecoration(
-            color: widget.backgroundColor,
+            color: _bgColor,
             shape: CircleBorder(),
           ),
           transform: Matrix4.translationValues(0, -_yOffsetAnimation.value, 0),
           child: Stack(children: <Widget>[
             Container(
               alignment: Alignment.center,
-              child: Text(
-                widget.text ?? "r",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, color: widget.unselectedForegroundColor),
-              )
-              // widget.icon == null
-              //     ? SvgPicture.asset(
-              //         widget.svgPath!,
-              //         color: widget.unselectedForegroundColor,
-              //         width: _iconSize,
-              //         height: _iconSize * scaleAnimation.value,
-              //         colorBlendMode: BlendMode.srcIn,
-              //       )
-              //     : Icon(
-              //         widget.icon,
-              //         color: widget.unselectedForegroundColor,
-              //         size: _iconSize * scaleAnimation.value,
-              //       ),
-            ),
-            Container(
-              alignment: Alignment.center,
               child:  Text(
                 widget.text ?? "r",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, color: widget.selectedForegroundColor),
+                style: TextStyle(fontWeight: FontWeight.bold, color: _fgColor),
               )
-              // ClipRect(
-              //   clipper: _SvgPictureClipper(
-              //       _activeColorClipAnimation.value * scaleAnimation.value),
-              //   child: widget.icon == null
-              //       ? SvgPicture.asset(
-              //           widget.svgPath!,
-              //           color: widget.selectedForegroundColor,
-              //           width: _iconSize,
-              //           height: _iconSize * scaleAnimation.value,
-              //           colorBlendMode: BlendMode.srcIn,
-              //         )
-              //       : Icon(
-              //           widget.icon,
-              //           color: widget.selectedForegroundColor,
-              //           size: _iconSize * scaleAnimation.value,
-              //         ),
-              // ),
             ),
           ]),
         ),

@@ -164,7 +164,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                 )
-            ))
+            )),
+            SettingsTile(
+                title: Text("Reset Calendar", style: TextStyle(fontSize: 20.0, color: Colors.red)),
+                leading: Icon(Icons.remove),
+                onPressed: (c) {
+                  data.calendarData.reset();
+                },
+              ),
+
           ],
         ),
         SettingsSection(
@@ -180,6 +188,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 forgotMDP();
               },
             ),
+
           ],
         ),
 

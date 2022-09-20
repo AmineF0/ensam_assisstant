@@ -13,14 +13,14 @@ gradesIconAdress = 'Assets/icons8-grades-100.png';
 class HomeScreen extends StatefulWidget {
   List<MenuItem> mainMenu = [
     MenuItem.image("Personal Info", briefIconAdress, 0, data.pInfo.markCurrent),
-    MenuItem.image("Elements", gradesIconAdress, 1, data.pInfo.markCurrent),
-    MenuItem.image("Modules", gradesIconAdress, 2, data.pInfo.moduleCurrent),
-    MenuItem.image("Absence", attendanceIconAdress, 3, data.pInfo.attendance),
+    MenuItem.image("Calendar", attendanceIconAdress, 1,  data.pInfo.markCurrent),
+    MenuItem.image("Elements", gradesIconAdress, 2, data.pInfo.markCurrent),
+    MenuItem.image("Modules", gradesIconAdress, 3, data.pInfo.moduleCurrent),
+    MenuItem.image("Semester", gradesIconAdress, 4, data.pInfo.semester),
+    MenuItem.image("Absence", attendanceIconAdress, 5, data.pInfo.attendance),
     //MenuItem("Notifications", Icons.notifications, 4, data.pInfo.markCurrent),
-    MenuItem("Settings", Icons.settings, 4, data.pInfo.markCurrent),
-    MenuItem("About Us", Icons.info_outline, 5, data.pInfo.markCurrent),
-    MenuItem("MarkmodTest", Icons.info_outline, 6, data.pInfo.markCurrent),
-    MenuItem("MarkElemTest", Icons.info_outline, 7, data.pInfo.markCurrent),
+    MenuItem("Settings", Icons.settings, 6, data.pInfo.markCurrent),
+    MenuItem("About Us", Icons.info_outline, 7, data.pInfo.markCurrent),
 
   ];
 

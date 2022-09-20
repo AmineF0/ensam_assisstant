@@ -12,6 +12,7 @@ class Graph extends StatefulWidget {
   final String title, code;
   String? type, id;
   bool isMod = false;
+  bool isSem = false;
 
   Graph(
       {Key? key,
@@ -33,6 +34,7 @@ class _Graph extends State<Graph> {
 
   void initState() {
     widget.isMod = widget.dataList.getBool("isMod");
+    widget.isSem = widget.dataList.getBool("isSem");
     loadData();
     super.initState();
   }
@@ -82,7 +84,7 @@ class _Graph extends State<Graph> {
                   AspectRatio(
                       aspectRatio: 1.70,
                       child: Container(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          padding: EdgeInsets.only(top: 10, bottom: 10, right: 20),
                           child: _child))
                 ],
               ),
@@ -195,7 +197,12 @@ class _Graph extends State<Graph> {
   }
 
   loadData() {
-    Stream f = data.classment.getAbsoluteClassment(widget.dataList.get("code"),
+    Stream f ;
+    if(widget.isSem) f= data.semesterClassment.getAbsoluteClassment(
+      widget.dataList.get("year"), widget.dataList.get("semester"),
+      widget.dataList.get("filiere"),  widget.dataList.get("niveau"),
+    );
+    else f= data.classment.getAbsoluteClassment(widget.dataList.get("code"),
           widget.dataList.get("year"), widget.isMod,
           code: Classment.translate(widget.code, widget.isMod));
 

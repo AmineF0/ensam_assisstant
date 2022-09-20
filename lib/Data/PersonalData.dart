@@ -1,3 +1,5 @@
+import 'package:ensam_assisstant/Data/Semester.dart';
+
 import 'ModulesInfo.dart';
 import 'package:ensam_assisstant/Data/DataList.dart';
 import 'package:html/dom.dart';
@@ -31,7 +33,8 @@ class PersonalData {
   ModList modList = new ModList();
   late Elements markCurrent, markAbs;
   late Module moduleCurrent, moduleAbs;
-  late UnprocessableMarks semester, year;
+  late Semester semester;
+  late UnprocessableMarks year;
   late Attendance attendance;
 
   PersonalData._();
@@ -56,7 +59,7 @@ class PersonalData {
     await loadAttendance();
     //await loadMarksAbs();
     //await loadModuleAbs();
-    //await loadSemester();
+    await loadSemester();
     //await loadYear();
     await loadModList();
   }
@@ -68,7 +71,7 @@ class PersonalData {
     await loadAttendance();
     //await loadMarksAbs();
     //await loadModuleAbs();
-    //await loadSemester();
+    await loadSemester();
     //await loadYear();
     await loadModList();
   }
@@ -129,7 +132,7 @@ class PersonalData {
   loadSemester() async {
     Document doc = await getHtml(semesterLink);
     var table = doc.querySelector('table');
-    semester = new UnprocessableMarks.loadTable(
+    semester = new Semester.loadTable(
       "semester",
       table,
       2,

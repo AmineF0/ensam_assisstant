@@ -32,10 +32,17 @@ class FluidNavBarStyle with Diagnosticable {
   /// Icons color when inactivated
   final Color? iconUnselectedForegroundColor;
 
+  final Color? iconSelectedBackgroundColor;
+
+  /// Icons color when inactivated
+  final Color? iconUnselectedBackgroundColor;
+
   const FluidNavBarStyle({
     this.barBackgroundColor,
     this.iconBackgroundColor,
     this.iconSelectedForegroundColor,
     this.iconUnselectedForegroundColor,
+    this.iconSelectedBackgroundColor,
+    this.iconUnselectedBackgroundColor,
   });
 }

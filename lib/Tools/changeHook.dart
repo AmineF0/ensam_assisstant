@@ -13,6 +13,10 @@ class ChangeHook {
     return resp;
   }
 
+  setChangeHook(){
+
+  }
+
   getServerUpdate() {
     return data?["time"] ?? "1";
   }

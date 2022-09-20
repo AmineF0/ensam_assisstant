@@ -5,7 +5,6 @@ import 'package:ensam_assisstant/Data/RuntimeData.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_android/path_provider_android.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import 'notifications.dart';

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ensam_assisstant/main.dart';
-import 'package:path_provider/path_provider.dart';
 
 loadFromFile(String identifier) async {
   File file = new File(data.directory!.path + '/storage/' + identifier);

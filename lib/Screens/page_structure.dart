@@ -1,20 +1,14 @@
-import 'dart:io';
 import 'dart:math' show pi;
 
 import 'package:ensam_assisstant/Screens/Components/AttendanceUI/AttendanceMenu.dart';
-import 'package:ensam_assisstant/Screens/Components/Marks/MarkData.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
-
-import 'Components/InfoListUI.dart';
-import 'Components/Marks/MarkInfoList.dart';
 import 'Pages/AboutUs.dart';
+import 'Pages/Calendar.dart';
 import 'Pages/HomeScreenGUI.dart';
-import 'Pages/NotifHistP.dart';
+import 'SemesterGUI.dart';
 import 'mainGUI.dart';
 import 'table_data_cleaner.dart';
 import 'Pages/SettingsScreen.dart';
@@ -47,12 +41,14 @@ class PageStructure extends StatelessWidget {
 
     switch (_currentPage) {
       case 0: tmpCnt = HomeScreenGUI(); break;
-      case 1: tmpCnt = TableWidgetCleaner(data: data.pInfo.markCurrent); break;
-      case 2: tmpCnt = TableWidgetCleaner(data: data.pInfo.moduleCurrent); break;
-      case 3: tmpCnt = AttendaceMenu(); break;
-      case 4: tmpCnt = SettingsScreen(); break;
-      case 5: tmpCnt = AboutUs(); break;
-      case 6: tmpCnt = Text(data.log); break;
+      case 1: tmpCnt = Calendar(); break;
+      case 2: tmpCnt = TableWidgetCleaner(data: data.pInfo.markCurrent); break;
+      case 3: tmpCnt = TableWidgetCleaner(data: data.pInfo.moduleCurrent); break;
+      case 4: tmpCnt = SemesterGUI(data: data.pInfo.semester); break;
+      case 5: tmpCnt = AttendaceMenu(); break;
+      case 6: tmpCnt = SettingsScreen(); break;
+      case 7: tmpCnt = AboutUs(); break;
+      case 9: tmpCnt = Text(data.log); break;
       default:tmpCnt = Container(
           color: Colors.grey[300],
           child: new TableWidgetCleaner(data: data.pInfo.markCurrent),

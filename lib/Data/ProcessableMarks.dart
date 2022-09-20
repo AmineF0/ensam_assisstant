@@ -206,7 +206,8 @@ abstract class ProcessableMarks extends DataList {
       "code": getCode(i),
       "year": getYear(i),
       "lines": getDataLines(i),
-      "isMod": getIsMod()
+      "isMod": getIsMod(),
+      "isSem" :   false
     };
 
     return elem;
