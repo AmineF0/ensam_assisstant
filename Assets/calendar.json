@@ -1,0 +1,338 @@
+[{
+  "startDate": [2022,9,19],
+  "Sec1":[{
+    "name":"Machines électriques [Salhi Med]",
+    "week":"1-10",
+    "day":"0",
+    "session":"0"
+  },
+    {
+      "name":"Mécanique des structures [El Gadari] ",
+      "week":"1-9",
+      "day":"0",
+      "session":"1"
+    },
+    {
+      "name":"Procédés de forge [Allouch]",
+      "week":"1-7",
+      "day":"0",
+      "session":"3"
+    },
+    {
+      "name":"Traitement de signal [Saadi]",
+      "week":"1-8",
+      "day":"1",
+      "session":"0"
+    },
+    {
+      "name":"Automatique [Taleb]",
+      "week":"1-9",
+      "day":"1",
+      "session":"1"
+    },
+    {
+      "name":"Mécanique des Matériaux [Kabiri]",
+      "week":"5-14",
+      "day":"1",
+      "session":"2"
+    },
+    {
+      "name":"RNE [Berrada] ",
+      "week":"1-12",
+      "day":"1",
+      "session":"3"
+    },
+    {
+      "name":"Mécanique des Milieux Continus [Haterbouch]",
+      "week":"2-14",
+      "day":"2",
+      "session":"0"
+    },
+    {
+      "name":"Procédés de fonderie [Hamadellah] ",
+      "week":"1-8",
+      "day":"2",
+      "session":"1"
+    },
+    {
+      "name":"Calcul Matriciel Numérique [Douimi] ",
+      "week":"1-12",
+      "day":"2",
+      "session":"2"
+    },
+    {
+      "name":"Machines électriques [Bououlid]",
+      "week":"1-10",
+      "day":"2",
+      "session":"3"
+    },
+    {
+      "name":"Programmation linéaire [Masrour] ",
+      "week":"1-10",
+      "day":"3",
+      "session":"1"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Oudra]",
+      "week":"1-5",
+      "day":"3",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Oudra]",
+      "week":"1-4",
+      "day":"3",
+      "session":"3"
+    },
+    {
+      "name":"Eléments et Architectures des Machines (TD)",
+      "week":"6-13",
+      "day":"3",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines (TD)",
+      "week":"6-13",
+      "day":"3",
+      "session":"3"
+    },
+    {
+      "name":"Electronique de puissance [Lagrioui] ",
+      "week":"4-11",
+      "day":"4",
+      "session":"0"
+    },
+    {
+      "name":"Statistiques [Douimi]",
+      "week":"1-14",
+      "day":"4",
+      "session":"1"
+    },
+    {
+      "name":"Résistance des matériaux [El Gadari]",
+      "week":"1-9",
+      "day":"4",
+      "session":"3"
+    }],
+
+
+  "Sec2":[{
+    "name":"Mécanique des structures [El Gadari] ",
+    "week":"1-9",
+    "day":"0",
+    "session":"0"
+  },
+    {
+      "name":"Traitement de signal [Lagrioui] ",
+      "week":"1-8",
+      "day":"0",
+      "session":"1"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Oudra]",
+      "week":"1-5",
+      "day":"0",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Oudra]",
+      "week":"1-4",
+      "day":"0",
+      "session":"3"
+    },
+    {
+      "name":" TD Eléments et Architectures des Machines [Oudra]",
+      "week":"6-13",
+      "day":"0",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines (TD)",
+      "week":"6-13",
+      "day":"3",
+      "session":"3"
+    },
+    {
+      "name":"Automatique [Taleb] ",
+      "week":"1-9",
+      "day":"1",
+      "session":"0"
+    },
+    {
+      "name":"Machines électriques [Yaden]",
+      "week":"1-10",
+      "day":"1",
+      "session":"1"
+    },
+    {
+      "name":" RNE [Berrada]",
+      "week":"1-12",
+      "day":"1",
+      "session":"2"
+    },
+    {
+      "name":"Mécanique des Matériaux [Kabiri]",
+      "week":"5-14",
+      "day":"1",
+      "session":"3"
+    },
+    {
+      "name":"Procédés de fonderie [Hamadellah]",
+      "week":"1-8",
+      "day":"2",
+      "session":"0"
+    },
+    {
+      "name":"Procédés de forge [Aoura] ",
+      "week":"1-7",
+      "day":"2",
+      "session":"1"
+    },
+    {
+      "name":"Calcul Matriciel Numérique [Douimi]",
+      "week":"1-12",
+      "day":"2",
+      "session":"3"
+    },
+    {
+      "name":"Programmation linéaire [Masrour]",
+      "week":"1-10",
+      "day":"3",
+      "session":"0"
+    },
+    {
+      "name":"Electronique de puissance[Lagrioui]",
+      "week":"4-11",
+      "day":"3",
+      "session":"1"
+    },
+    {
+      "name":"Statistiques [Douimi] ",
+      "week":"1-14",
+      "day":"4",
+      "session":"0"
+    },
+    {
+      "name": "Mécanique des Milieux Continus [Aboussaleh] ",
+      "week":"1-14",
+      "day":"4",
+      "session":"1"
+    },
+    {
+      "name":"Résistance des matériaux [El Gadari] ",
+      "week":"1-9",
+      "day":"4",
+      "session":"2"
+    }],
+
+  "Sec4":[{
+    "name":"Automatique [Bakhti] ",
+    "week":"1-9",
+    "day":"0",
+    "session":"0"
+  },
+    {
+      "name":"Machines électriques [Salhi Med] ",
+      "week":"1-10",
+      "day":"0",
+      "session":"1"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Sallaou] ",
+      "week":"1-5",
+      "day":"0",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines [Sallaou] ",
+      "week":"1-4",
+      "day":"0",
+      "session":"3"
+    },
+    {
+      "name":" TD Eléments et Architectures des Machines (TD)",
+      "week":"6-13",
+      "day":"0",
+      "session":"2"
+    },
+    {
+      "name":"Eléments et Architectures des Machines (TD)",
+      "week":"6-13",
+      "day":"0",
+      "session":"3"
+    },
+    {
+      "name":"Procédés de fonderie [Ait El Haj] ",
+      "week":"1-8",
+      "day":"1",
+      "session":"0"
+    },
+    {
+      "name":"Traitement de signal [Saadi] ",
+      "week":"1-8",
+      "day":"1",
+      "session":"1"
+    },
+    {
+      "name":" RNE [Fassi Fihri] ",
+      "week":"1-12",
+      "day":"1",
+      "session":"2"
+    },
+    {
+      "name":"Mécanique des Matériaux [Haterbouch] ",
+      "week":"5-14",
+      "day":"1",
+      "session":"3"
+    },
+    {
+      "name":"Statistiques [Barkouki] ",
+      "week":"1-14",
+      "day":"2",
+      "session":"0"
+    },
+    {
+      "name":"Electronique de puissance[Bououlid]",
+      "week":"4-11",
+      "day":"2",
+      "session":"1"
+    },
+    {
+      "name":"Mécanique des structures [Bahi]",
+      "week":"1-9",
+      "day":"2",
+      "session":"2"
+    },
+    {
+      "name":"Programmation linéaire [El Ossmani]",
+      "week":"1-10",
+      "day":"2",
+      "session":"3"
+    },
+    {
+      "name":"Procédés de forge [Allouch] ",
+      "week":"1-10",
+      "day":"3",
+      "session":"0"
+    },
+    {
+      "name":"Calcul Matriciel Numérique [Taakili] ",
+      "week":"1-12",
+      "day":"3",
+      "session":"1"
+    },
+    {
+      "name":"Résistance des matériaux [Bahi]",
+      "week":"1-9",
+      "day":"4",
+      "session":"0"
+    },
+    {
+      "name": "Mécanique des Milieux Continus [Haterbouch]",
+      "week":"2-14",
+      "day":"4",
+      "session":"1"
+    }
+  ]
+
+}]
