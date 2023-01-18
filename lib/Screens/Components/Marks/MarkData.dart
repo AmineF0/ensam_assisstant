@@ -11,5 +11,7 @@ class MarkData {
     return data[list];
   }
 
-  bool getBool(String s) {return data[s];}
+  bool getBool(String s) {
+    return data[s] ?? false;
+  }
 }

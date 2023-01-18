@@ -8,6 +8,7 @@ import 'package:ensam_assisstant/Data/notificationsHistory.dart';
 import 'package:ensam_assisstant/Screens/Pages/Calendar.dart';
 import 'package:ensam_assisstant/Tools/changeHook.dart';
 import 'package:ensam_assisstant/Tools/fileManagement.dart';
+import 'package:ensam_assisstant/Tools/getAllMods.dart';
 import 'package:ensam_assisstant/Tools/logging.dart';
 import 'package:ensam_assisstant/Tools/request.dart';
 import 'package:ensam_assisstant/Tools/userData.dart';
@@ -52,14 +53,21 @@ class RuntimeData {
   }
 
   loadCommon() async {
+
+
+
     notifsHistory.init();
 
-    await pInfo.markCurrent.process();
+    pInfo.elemCurrent.body[3][6] = "1" ;
+
+    await pInfo.elemCurrent.process();
     await pInfo.moduleCurrent.process();
     await pInfo.attendance.process();
     await pInfo.semester.process();
 
-    change.addAll(await pInfo.markCurrent.update());
+
+
+    change.addAll(await pInfo.elemCurrent.update());
     change.addAll(await pInfo.moduleCurrent.update());
     change.addAll(await pInfo.attendance.update());
 
@@ -68,6 +76,7 @@ class RuntimeData {
 
   Future<void> load() async {
     pInfo = await PersonalData.create();
+
     await classment.init();
     await loadCommon();
     await calendarData.loadCalendar();
@@ -96,7 +105,7 @@ class RuntimeData {
 
   Future<void> loadFromMemory() async {
     pInfo = await PersonalData.create();
-    pInfo.markCurrent.load();
+    pInfo.elemCurrent.load();
   }
 
   loadMinimal() async {

@@ -42,16 +42,17 @@ class PageStructure extends StatelessWidget {
     switch (_currentPage) {
       case 0: tmpCnt = HomeScreenGUI(); break;
       case 1: tmpCnt = Calendar(); break;
-      case 2: tmpCnt = TableWidgetCleaner(data: data.pInfo.markCurrent); break;
+      case 2: tmpCnt = TableWidgetCleaner(data: data.pInfo.elemCurrent); break;
       case 3: tmpCnt = TableWidgetCleaner(data: data.pInfo.moduleCurrent); break;
       case 4: tmpCnt = SemesterGUI(data: data.pInfo.semester); break;
       case 5: tmpCnt = AttendaceMenu(); break;
-      case 6: tmpCnt = SettingsScreen(); break;
-      case 7: tmpCnt = AboutUs(); break;
+      case 6: tmpCnt = TableWidgetCleaner(data: data.pInfo.elemCurrent); break;
+      case 7: tmpCnt = SettingsScreen(); break;
+      case 8: tmpCnt = AboutUs(); break;
       case 9: tmpCnt = Text(data.log); break;
       default:tmpCnt = Container(
           color: Colors.grey[300],
-          child: new TableWidgetCleaner(data: data.pInfo.markCurrent),
+          child: new TableWidgetCleaner(data: data.pInfo.elemCurrent),
           );
     }
 

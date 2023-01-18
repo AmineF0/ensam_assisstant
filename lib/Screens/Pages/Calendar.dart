@@ -39,8 +39,8 @@ class _CalendarState extends State<Calendar> {
           controller: data.calendarData.eventController,
           showLiveTimeLineInAllDays: false, // To display live time line in all pages in week view.
           //width: 400, // width of week view.
-          minDay: DateTime(2022),
-          maxDay: DateTime(2023),
+          minDay: DateTime(2023),
+          maxDay: DateTime(2024),
           endTime: 24,
           startTime: 6,
           //initialDay: DateTime(2021),

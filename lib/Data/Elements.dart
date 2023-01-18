@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:ensam_assisstant/Data/Classement.dart';
 
@@ -23,6 +24,8 @@ class Elements extends ProcessableMarks {
     keyColumns.add(processedHeader.length);
     processedHeader.add("Intitule");
     processedHeader.add("Projection");
+    processedHeader.add("Coef");
+    print("z");
     processedBody.forEach((element) {
       element.add(modList.findElem(element[this.indexPos])["Intitule"]);
     });
@@ -30,7 +33,8 @@ class Elements extends ProcessableMarks {
     super.process();
 
     for (int i = 0; i < processedBody.length; i++) {
-      processedBody[i].add(calculateProjection(i).toStringAsFixed(2));
+      processedBody[i].add(calculateProjection(i)[0]);
+      processedBody[i].add(calculateProjection(i)[1]);
     }
 
     for (int i = 0; i < processedBody.length; i++) {
@@ -185,9 +189,20 @@ class Elements extends ProcessableMarks {
     double coefecrit = double.tryParse(elemInfo["CoefEcrit"]) ?? 0;
     double coeftp = double.tryParse(elemInfo["CoefTP"]) ?? 0;
 
-    return ((cc * coefCC + ex * coefex) * coefecrit + tp * coeftp) /
-        (coeftp + coefecrit);
+    double projection = 0;
+    double ecrit = (cc * coefCC + ex * coefex);
+    if(getInfoInTable("RAT", i) != "--"){
+      ecrit = max(ecrit, max(rat, rat * coefex + cc * coefCC));
+    }
+    projection = (ecrit * coefecrit + tp * coeftp) /
+    (coeftp + coefecrit);
+
+    String coefficient = "( (CC*$coefCC + EX*$coefex)*$coefecrit + TP*$coeftp )/${coefecrit+coeftp}";
+
+    return [projection.toStringAsFixed(2), coefficient];
   }
+
+
 
   getListCourses() {}
 
@@ -199,13 +214,30 @@ class Elements extends ProcessableMarks {
       [getPair("TP", i), getPair("MoySO", i)],
       [getPair("RAT", i), getPair("MoySR", i)],
       [getPair("Moy", i), getPair("Dec", i)],
-      [getPair("Projection", i)]
+      [getPair("Projection", i)],
+      [getPair("Coef", i)]
     ];
   }
 
   @override
   getName(i) {
     return processedBody[i][nameToIndex["Intitule"]] ?? body[i][indexPos];
+  }
+
+  getElementDataFromAsMap(String elem) {
+    int? e = nameToIndex["CodeElem"];
+    for(var line in processedBody){
+      if(line[e] == elem) return lineToMap(line);
+    }
+
+  }
+  
+  lineToMap(line){
+    Map m = {};
+    for(int j=0; j<processedHeader.length; j++){
+      m[processedHeader[j]] = line[j];
+    }
+    return m;
   }
 
   @override

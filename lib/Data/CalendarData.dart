@@ -51,9 +51,9 @@ class CalendarData{
 
     List<CalendarEventData> events = [];
 
-    for(var clas in sessions){
-      events.addAll(getEvent(clas));
-    }
+     if(sessions != null) for(var clas in sessions){
+        events.addAll(getEvent(clas));
+      }
 
     return events;
   }

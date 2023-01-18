@@ -35,7 +35,7 @@ getCombinations() async {
 
 loadModList() async {
   await getCombinations();
-
+  print("dt");
   for (String nv in combinations[0]) {
     for (String fil in combinations[1]) {
       for (String sem in combinations[2]) {

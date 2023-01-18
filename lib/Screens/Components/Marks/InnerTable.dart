@@ -80,6 +80,7 @@ class InnerTable extends StatelessWidget {
     List<TableRow> rows = [];
 
     //inner
+
     m.getList("lines").forEach((element) {
       int len = element.length;
 
@@ -100,7 +101,7 @@ class InnerTable extends StatelessWidget {
         ],
       ));
     });
-    if(moreInfoVisible) rows.add(TableRow(
+    if(moreInfoVisible && !m.getBool("isNotVisible") ) rows.add(TableRow(
       children: [
         Container(
           alignment: Alignment.center,

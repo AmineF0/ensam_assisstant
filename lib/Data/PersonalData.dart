@@ -31,7 +31,7 @@ class PersonalData {
 
   Map personal = {};
   ModList modList = new ModList();
-  late Elements markCurrent, markAbs;
+  late Elements elemCurrent, markAbs;
   late Module moduleCurrent, moduleAbs;
   late Semester semester;
   late UnprocessableMarks year;
@@ -108,7 +108,7 @@ class PersonalData {
 
   loadMarksCurrent() async {
     Document doc = await getHtml(markCurrentLink);
-    markCurrent =
+    elemCurrent =
         new Elements.loadTable("markCurrent", doc.querySelector('table'), 0);
   }
 
